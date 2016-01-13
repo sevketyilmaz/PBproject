@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">PillBox Application</string>
     <string name="action_settings">Settings</string>
+
+    <string name="profile_guest_name">Guest</string>
+    <string name="profile_guest_email">guest_pillbox@hacktusdynamics.com.tr</string>
+    <string name="add_account">Add Acount</string>
+    <string name="add_account_description">Add a new account.</string>
+    <string name="manage_account">Manage Accounts</string>
+
 </resources>

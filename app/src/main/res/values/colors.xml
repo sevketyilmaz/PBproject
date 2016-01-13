@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+<!--
+    900green #1B5E20
+    700green #388E3C
+    500green #4CAF50
+    300green #81C784
+    100green #C8E6C9
+
+    ========accent
+    A700    #AEEA00
+-->
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#AEEA00</color>
+
+    <color name="material_drawer_selected">#E8E8E8</color>
+    <color name="material_drawer_selected_text">#4CAF50</color>
+    <color name="material_drawer_header_selection_text">#FFF</color>
+
 </resources>
