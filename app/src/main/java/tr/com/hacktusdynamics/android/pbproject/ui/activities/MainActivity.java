@@ -1,27 +1,40 @@
-package tr.com.hacktusdynamics.android.pbproject;
+package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import tr.com.hacktusdynamics.android.pbproject.R;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int IDENTIFIER_ADD_ACCOUNT = 1;
-    private static final int IDENTIFIER_MANAGE_ACCOUNT = 2;
+    private static final int IDENTIFIER_HEADER_ADD_ACCOUNT = 1;
+    private static final int IDENTIFIER_HEADER_MANAGE_ACCOUNT = 2;
+
+    //main items
+    private static final int IDENTIFIER_ITEM_HOME= 10;
+    private static final int IDENTIFIER_ITEM_CREATE_ALARM = 11;
+
+    //sticky items
+    private static final int IDENTIFIER_STICKY_SETTINGS = 20;
 
     //save our drawer or header
     private AccountHeader accountHeader = null;
@@ -52,6 +65,47 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
 
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_home)
+                                .withIcon(FontAwesome.Icon.faw_home)
+                                .withIdentifier(IDENTIFIER_ITEM_HOME),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_create_alarm)
+                                .withIcon(FontAwesome.Icon.faw_barcode)
+                                .withIdentifier(IDENTIFIER_ITEM_CREATE_ALARM)
+                )
+                .addStickyDrawerItems(
+                        new SecondaryDrawerItem().withName(R.string.action_settings)
+                                .withIcon(FontAwesome.Icon.faw_cog)
+                                .withIdentifier(IDENTIFIER_STICKY_SETTINGS)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (drawerItem != null) {
+                            Intent intent = null;
+                            if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_HOME) {
+                                //TODO:
+                                //since its main activity, do nothing
+                                Toast.makeText(MainActivity.this, "Home clicked!", Toast.LENGTH_LONG).show();
+                            } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_CREATE_ALARM) {
+                                Toast.makeText(MainActivity.this, "Create alarm clicked!", Toast.LENGTH_LONG).show();
+                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                            } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
+                                Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
+                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                            }
+
+                            //Start the clicked item activity
+                            if (intent != null) {
+                                //startActivity(intent);
+                                MainActivity.this.startActivity(intent);
+                            }
+
+                        }
+
+                        return false;
+                    }
+                })
                 .withSavedInstance(savedInstanceState)
                 .build();
 
@@ -76,19 +130,20 @@ public class MainActivity extends AppCompatActivity {
                         new ProfileSettingDrawerItem()
                                 .withName(getString(R.string.add_account))
                                 .withDescription(getString(R.string.add_account_description))
-                                .withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_dark_primary_text))
-                                .withIdentifier(IDENTIFIER_ADD_ACCOUNT),
+                                .withIcon(GoogleMaterial.Icon.gmd_add)
+                                //.withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_dark_primary_text))
+                                .withIdentifier(IDENTIFIER_HEADER_ADD_ACCOUNT),
                         new ProfileSettingDrawerItem()
                                 .withName(getString(R.string.manage_account))
                                 .withIcon(GoogleMaterial.Icon.gmd_settings)
-                                .withIdentifier(IDENTIFIER_MANAGE_ACCOUNT)
+                                .withIdentifier(IDENTIFIER_HEADER_MANAGE_ACCOUNT)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier 1, add a new profile
-                        if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_ADD_ACCOUNT) {
+                        if (profile instanceof IDrawerItem && ((IDrawerItem)profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
                             //TODO: Open add account activity
                             //TODO: Save profile
                             //TODO: Create profile drawer item from saved profile and show it in UI
@@ -107,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                                 accountHeader.addProfiles(profileNew);
                             }
                             */
-                        } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_MANAGE_ACCOUNT) {
+                        } else if (profile instanceof IDrawerItem && ((IDrawerItem)profile).getIdentifier() == IDENTIFIER_HEADER_MANAGE_ACCOUNT) {
                             //TODO: Open manage account activity
                             //TODO: Save changes
                             //TODO: update the UI

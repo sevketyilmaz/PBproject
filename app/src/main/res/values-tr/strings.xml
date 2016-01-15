@@ -9,4 +9,7 @@
     <string name="add_account_description">Yeni bir hesap ekle.</string>
     <string name="manage_account">Hesapları düzenle</string>
 
+    <string name="drawer_item_home">Ana Sayfa</string>
+    <string name="drawer_item_create_alarm">Alarm Oluştur</string>
+
 </resources>

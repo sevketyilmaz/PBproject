@@ -8,4 +8,7 @@
     <string name="add_account_description">Add a new account.</string>
     <string name="manage_account">Manage Accounts</string>
 
+    <string name="drawer_item_home">Home</string>
+    <string name="drawer_item_create_alarm">Create Alarm</string>
+
 </resources>
