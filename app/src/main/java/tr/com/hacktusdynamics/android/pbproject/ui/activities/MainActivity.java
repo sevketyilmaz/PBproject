@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Home clicked!", Toast.LENGTH_LONG).show();
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_CREATE_ALARM) {
                                 Toast.makeText(MainActivity.this, "Create alarm clicked!", Toast.LENGTH_LONG).show();
+                                intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
                                 Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
