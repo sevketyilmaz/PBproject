@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     //main items
     private static final int IDENTIFIER_ITEM_HOME= 10;
     private static final int IDENTIFIER_ITEM_CREATE_ALARM = 11;
+    private static final int IDENTIFIER_ITEM_MEDICATIONS= 12;
+
 
     //sticky items
     private static final int IDENTIFIER_STICKY_SETTINGS = 20;
@@ -71,8 +73,11 @@ public class MainActivity extends AppCompatActivity {
                                 .withIcon(FontAwesome.Icon.faw_home)
                                 .withIdentifier(IDENTIFIER_ITEM_HOME),
                         new PrimaryDrawerItem().withName(R.string.drawer_item_create_alarm)
-                                .withIcon(FontAwesome.Icon.faw_barcode)
-                                .withIdentifier(IDENTIFIER_ITEM_CREATE_ALARM)
+                                .withIcon(FontAwesome.Icon.faw_history)
+                                .withIdentifier(IDENTIFIER_ITEM_CREATE_ALARM),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_medications)
+                                .withIcon(FontAwesome.Icon.faw_medkit)
+                                .withIdentifier(IDENTIFIER_ITEM_MEDICATIONS)
                 )
                 .addStickyDrawerItems(
                         new SecondaryDrawerItem().withName(R.string.action_settings)
@@ -94,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_CREATE_ALARM) {
                                 Toast.makeText(MainActivity.this, "Create alarm clicked!", Toast.LENGTH_LONG).show();
                                 intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                            } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_MEDICATIONS) {
+                                Toast.makeText(MainActivity.this, "Medications clicked!", Toast.LENGTH_LONG).show();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
                                 Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
@@ -198,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
             return true;
         }
 

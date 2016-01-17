@@ -11,10 +11,12 @@
 
     <string name="drawer_item_home">Ana Sayfa</string>
     <string name="drawer_item_create_alarm">Alarm Oluştur</string>
+    <string name="drawer_item_medications">İlaçlar</string>
     <string name="drawer_item_help">Yardım</string>
 
     <string name="section_format">Merhaba Dünya from section: %1$d</string>
     <string name="create_alarm_activity_title">İlaç Kutusu Alarmları Oluştur</string>
+
 
 
 </resources>
