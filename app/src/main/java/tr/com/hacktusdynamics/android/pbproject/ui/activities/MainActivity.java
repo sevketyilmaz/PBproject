@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     //sticky items
     private static final int IDENTIFIER_STICKY_SETTINGS = 20;
+    private static final int IDENTIFIER_STICKY_HELP = 21;
 
     //save our drawer or header
     private AccountHeader accountHeader = null;
@@ -76,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 .addStickyDrawerItems(
                         new SecondaryDrawerItem().withName(R.string.action_settings)
                                 .withIcon(FontAwesome.Icon.faw_cog)
-                                .withIdentifier(IDENTIFIER_STICKY_SETTINGS)
+                                .withIdentifier(IDENTIFIER_STICKY_SETTINGS),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_help)
+                                .withIcon(FontAwesome.Icon.faw_question_circle)
+                                .withIdentifier(IDENTIFIER_STICKY_HELP)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -94,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
                                 Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                            } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_HELP) {
+                                Toast.makeText(MainActivity.this, "Help clicked!", Toast.LENGTH_LONG).show();
+                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             }
 
                             //Start the clicked item activity
@@ -101,9 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                 //startActivity(intent);
                                 MainActivity.this.startActivity(intent);
                             }
-
                         }
-
                         return false;
                     }
                 })
