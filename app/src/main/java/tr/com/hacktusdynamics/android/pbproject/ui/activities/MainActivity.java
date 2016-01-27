@@ -22,7 +22,11 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.ArrayList;
+
 import tr.com.hacktusdynamics.android.pbproject.R;
+
+import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -137,27 +141,16 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header_green)
                 .withCompactStyle(compact)
-                .addProfiles(
-                        profileGuest,
-
-                        //
-                        new ProfileSettingDrawerItem()
-                                .withName(getString(R.string.add_account))
-                                .withDescription(getString(R.string.add_account_description))
-                                .withIcon(GoogleMaterial.Icon.gmd_add)
-                                //.withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_dark_primary_text))
-                                .withIdentifier(IDENTIFIER_HEADER_ADD_ACCOUNT),
-                        new ProfileSettingDrawerItem()
-                                .withName(getString(R.string.manage_account))
-                                .withIcon(GoogleMaterial.Icon.gmd_settings)
-                                .withIdentifier(IDENTIFIER_HEADER_MANAGE_ACCOUNT)
+                .withProfiles(
+                        getUserProfilesAndItems() //gets guest profile and other drawer items
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier 1, add a new profile
-                        if (profile instanceof IDrawerItem && ((IDrawerItem)profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
+                        if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
+                            Toast.makeText(sApplicationContext, "add account clicked.", Toast.LENGTH_LONG).show();
                             //TODO: Open add account activity
                             //TODO: Save profile
                             //TODO: Create profile drawer item from saved profile and show it in UI
@@ -176,7 +169,8 @@ public class MainActivity extends AppCompatActivity {
                                 accountHeader.addProfiles(profileNew);
                             }
                             */
-                        } else if (profile instanceof IDrawerItem && ((IDrawerItem)profile).getIdentifier() == IDENTIFIER_HEADER_MANAGE_ACCOUNT) {
+                        } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_MANAGE_ACCOUNT) {
+                            Toast.makeText(sApplicationContext, "manage account clicked.", Toast.LENGTH_LONG).show();
                             //TODO: Open manage account activity
                             //TODO: Save changes
                             //TODO: update the UI
@@ -188,6 +182,25 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .withSavedInstance(savedInstanceState)
                 .build();
+    }
+
+    private ArrayList<IProfile> getUserProfilesAndItems() {
+        ArrayList<IProfile> p = new ArrayList<>();
+        p.add(profileGuest);
+        p.add(new ProfileSettingDrawerItem()
+                .withName(getString(R.string.add_account))
+                .withDescription(getString(R.string.add_account_description))
+                .withIcon(GoogleMaterial.Icon.gmd_add)
+                //.withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_dark_primary_text))
+                .withIdentifier(IDENTIFIER_HEADER_ADD_ACCOUNT)
+        );
+        p.add(new ProfileSettingDrawerItem()
+                .withName(getString(R.string.manage_account))
+                .withIcon(GoogleMaterial.Icon.gmd_settings)
+                .withIdentifier(IDENTIFIER_HEADER_MANAGE_ACCOUNT)
+        );
+
+        return p;
     }
 
     @Override
@@ -212,4 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
