@@ -1,7 +1,6 @@
 package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,11 +22,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import tr.com.hacktusdynamics.android.pbproject.Constants;
-import tr.com.hacktusdynamics.android.pbproject.MyApplication;
 import tr.com.hacktusdynamics.android.pbproject.R;
-import tr.com.hacktusdynamics.android.pbproject.models.UserProfile;
+import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private AccountHeader accountHeader = null;
     private Drawer navigationDrawer = null;
 
-    //private IProfile profileGuest;
+    private MyLab myLab = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
+
+        myLab = MyLab.get(sApplicationContext);
 
         //create the account header
         buildHeader(false, savedInstanceState);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.header_green)
                 .withCompactStyle(compact)
                 .withProfiles(
-                        getUserProfilesAndItems() //gets guest profile and other drawer items
+                        getUserProfilesAndItems() //gets user profiles and other drawer items
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -182,11 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<IProfile> getUserProfilesAndItems() {
-        ArrayList<IProfile> p = new ArrayList<>();
-
-        //create profile guest
-        IProfile profileGuest = getGuestProfile();
-        p.add(profileGuest);
+        List<IProfile> p = myLab.getUserProfiles();
         //TODO: when finish the Add Account activity, get other profiles and add to the list
 
         p.add(new ProfileSettingDrawerItem()
@@ -202,20 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIdentifier(IDENTIFIER_HEADER_MANAGE_ACCOUNT)
         );
 
-        return p;
-    }
-
-    /**Creates guestProfile with SharedPreferences guestUUID*/
-    private IProfile getGuestProfile() {
-        SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE);
-        String guestUUID = sp.getString(Constants.PREF_GUEST_UUID, null);
-        IProfile p = new UserProfile(guestUUID,
-                getString(R.string.profile_guest_name),
-                getString(R.string.profile_guest_email),
-                getString(R.string.profile_guest_password)
-                );
-        p.withIcon(getResources().getDrawable(R.drawable.guest_avatar));
-        return p;
+        return (ArrayList<IProfile>) p;
     }
 
     @Override

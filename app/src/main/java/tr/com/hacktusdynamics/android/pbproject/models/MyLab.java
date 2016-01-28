@@ -3,7 +3,10 @@ package tr.com.hacktusdynamics.android.pbproject.models;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,9 +14,12 @@ import java.util.List;
 import java.util.UUID;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
-import tr.com.hacktusdynamics.android.pbproject.MyApplication;
+import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxBaseHelper;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserProfileTable;
+import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
+
+import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 /**
  * Singleton class that holds all model class instances
@@ -26,17 +32,13 @@ public class MyLab {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    private List<Box> mBoxes;//move to db
-
     //Constructor private
     private MyLab(Context context){
         mContext = context;
         //its call the onCreate method on PillBoxBaseHelper class to create tables, if is not exist
         mDatabase = new PillBoxBaseHelper(mContext).getWritableDatabase();
 
-        mBoxes = new ArrayList<>();//move to db
-
-        create10DummyBoxes(); //seed data
+        //create10DummyBoxes(); //seed data
     }
 
     /** Singleton method to create MyLab instance */
@@ -48,27 +50,52 @@ public class MyLab {
     }
 
     //setters getters
+    /**Box portion of getters setters*/
     public List<Box> getBoxes(){
-        return mBoxes;//move to db
-    }
-
-    public Box getBox(UUID id){//read from db
-        for(Box box : mBoxes){
-            if(box.getId().equals(id)) return box;
-        }
         return null;
     }
+    public Box getBox(UUID id){
+        return null;
+    }
+    public void addBox(Box box){
 
-    public void addBox(Box box){//move to db
-        mBoxes.add(box);
+    }
+    public void updateBox(Box box){
+
     }
 
     /** UserProfile portion of getters setters*/
-    public List<UserProfile> getUserProfiles(){
-        return new ArrayList<>();
+    public List<IProfile> getUserProfiles(){
+        List<IProfile> profiles = new ArrayList<>();
+        profiles.add(getGuestProfile());
+        UserProfileCursorWrapper cursorWrapper = queryUserProfiles(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()){
+                IProfile p = cursorWrapper.getUserProfile();
+                p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+                profiles.add(p);
+                cursorWrapper.moveToNext();
+            }
+        }finally {
+            cursorWrapper.close();
+        }
+        return profiles;
     }
+
     public UserProfile getUserProfile(UUID id){
-        return null;
+        UserProfileCursorWrapper cursorWrapper = queryUserProfiles(
+                UserProfileTable.Cols.UUID + " = ?",
+                new String[]{id.toString()}
+        );
+        try {
+            if (cursorWrapper.getCount() == 0)
+                return null;
+            cursorWrapper.moveToFirst();
+            return (UserProfile)cursorWrapper.getUserProfile();
+        }finally {
+            cursorWrapper.close();
+        }
     }
     public void addUserProfile(UserProfile userProfile){
         ContentValues contentValues = getUserProfileContentValues(userProfile);
@@ -91,8 +118,21 @@ public class MyLab {
         return values;
     }
 
+    private UserProfileCursorWrapper queryUserProfiles(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                UserProfileTable.NAME,
+                null, //null select all columns
+                whereClause,
+                whereArgs,
+                null, //group by
+                null, //having
+                null //order by
+        );
+        return new UserProfileCursorWrapper(cursor);
+    }
+
     private void create10DummyBoxes(){
-        SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
         String guestProfile = sp.getString(Constants.PREF_GUEST_UUID, null);
         Box box;
         Date d;
@@ -102,6 +142,19 @@ public class MyLab {
             box.setBoxState(Box.BoxStates.FULL_CLOSE);
             addBox(box);
         }
+    }
+
+    /**Creates guestProfile with SharedPreferences guestUUID*/
+    private IProfile getGuestProfile() {
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
+        String guestUUID = sp.getString(Constants.PREF_GUEST_UUID, null);
+        IProfile p = new UserProfile(guestUUID,
+                sApplicationContext.getString(R.string.profile_guest_name),
+                sApplicationContext.getString(R.string.profile_guest_email),
+                sApplicationContext.getString(R.string.profile_guest_password)
+        );
+        p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+        return p;
     }
 
 }
