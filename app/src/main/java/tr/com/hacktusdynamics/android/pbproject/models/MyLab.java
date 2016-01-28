@@ -2,6 +2,7 @@ package tr.com.hacktusdynamics.android.pbproject.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.MyApplication;
+import tr.com.hacktusdynamics.android.pbproject.database.PillBoxBaseHelper;
 
 /**
  * Singleton class that holds all model class instances
@@ -20,12 +22,15 @@ public class MyLab {
 
     private static MyLab sMyLab;
     private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     private List<Box> mBoxes;
 
     //Constructor private
     private MyLab(Context context){
         mContext = context;
+        mDatabase = new PillBoxBaseHelper(mContext).getWritableDatabase();
+
         mBoxes = new ArrayList<>();
 
         create10DummyBoxes(); //seed data
