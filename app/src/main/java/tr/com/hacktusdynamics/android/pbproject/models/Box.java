@@ -14,6 +14,7 @@ public class Box implements Serializable, Comparable<Box> {
     private Date alarmDateTime;
     private Date createdTime;
     private BoxStates boxState;
+    private String userProfileId; // user that created this box
 
     public static enum BoxStates{
         EMPTY_CLOSE("EMPTY_CLOSE"),
@@ -32,15 +33,17 @@ public class Box implements Serializable, Comparable<Box> {
     }
 
     //Constructors
-    public Box(int boxNumber){
-        this(boxNumber, null);
+    public Box(int boxNumber, String userProfileId){
+        this(boxNumber, null, userProfileId);
     }
 
-    public Box(int boxNumber, Date alarmDateTime){
+    public Box(int boxNumber, Date alarmDateTime, String userProfileId){
         mId = UUID.randomUUID();
         createdTime = new Date();
         setBoxNumber(boxNumber);
         setAlarmTime(alarmDateTime);
+        setCreatedTime(null); //null for current datetime
+        setUserProfileId(userProfileId);
     }
 
     //setters getters
@@ -55,6 +58,14 @@ public class Box implements Serializable, Comparable<Box> {
     public int getBoxNumber() {
         return boxNumber;
     }
+    public void setCreatedTime(Date createdTime){
+        if(createdTime == null){
+            this.createdTime = new Date();
+        }else{
+            this.createdTime = new Date(createdTime.getTime());
+        }
+    }
+
     public void setBoxNumber(int boxNumber) {
         if(boxNumber >= 0 && boxNumber < MAX_BOX_SIZE) //between 0 and MAX_BOX_SIZE
             this.boxNumber = boxNumber;
@@ -70,6 +81,11 @@ public class Box implements Serializable, Comparable<Box> {
             this.alarmDateTime = new Date();
         else
             this.alarmDateTime = new Date(newDateTime.getTime());
+    }
+
+    public String getUserProfileId(){ return userProfileId; }
+    public void setUserProfileId(String userProfileId){
+        this.userProfileId = userProfileId;
     }
 
     public BoxStates getBoxState() {
