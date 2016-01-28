@@ -50,6 +50,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.create_alarm_activity_title);
+        //TODO: getSupportActionBar().setSubtitle("subtitle"); add total box number that set for alarm...(CriminalIntent EOC12)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the seven
         // primary sections of the activity.
