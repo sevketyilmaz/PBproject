@@ -24,11 +24,11 @@
     <string name="user_name_title">Kullanıcı Adı</string>
     <string name="user_name_hint">Kullanıcı Adını Giriniz</string>
 
-    <string name="manage_account_contact">Rehberden Ekle</string>
-    <string name="manage_account_dependent_phone_hint">Uyarı gönderilecek telefonu giriniz</string>
-    <string name="manage_account_password_hint">Şifre</string>
-    <string name="manage_account_email_hint">Email</string>
-    <string name="manage_account_name_hint">İsim</string>
+    <string name="account_contact">Rehberden Ekle</string>
+    <string name="account_dependent_phone_hint">Uyarı gönderilecek telefonu giriniz</string>
+    <string name="account_password_hint">Şifre</string>
+    <string name="account_email_hint">Email</string>
+    <string name="account_name_hint">İsim</string>
 
     <string name="add_account_activity_title">Hesap Ekle</string>
 

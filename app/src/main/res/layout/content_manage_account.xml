@@ -43,7 +43,7 @@
                 <AutoCompleteTextView android:id="@+id/manage_account_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manage_account_name_hint"
+                    android:hint="@string/account_name_hint"
                     android:inputType="textAutoComplete"
                     android:textColor="@color/material_login_login_text_color"
                     android:textSize="20sp" />
@@ -59,7 +59,7 @@
                 <AutoCompleteTextView android:id="@+id/manage_account_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manage_account_email_hint"
+                    android:hint="@string/account_email_hint"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/material_login_login_text_color"
                     android:textSize="20sp" />
@@ -75,7 +75,7 @@
                 <EditText android:id="@+id/manage_account_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manage_account_password_hint"
+                    android:hint="@string/account_password_hint"
                     android:inputType="textPassword"
                     android:textColor="@color/material_login_login_text_color"
                     android:textSize="20sp" />
@@ -94,7 +94,7 @@
                     <EditText android:id="@+id/manage_account_dependent_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/manage_account_dependent_phone_hint"
+                        android:hint="@string/account_dependent_phone_hint"
                         android:inputType="phone"
                         android:textColor="@color/material_login_login_text_color"
                         android:textSize="20sp" />
@@ -105,7 +105,7 @@
                     style="?android:textAppearanceSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/manage_account_contact"
+                    android:text="@string/account_contact"
                     android:background="@drawable/contact_btn"
                     android:layout_weight="1"/>
             </LinearLayout>

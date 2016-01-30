@@ -24,11 +24,11 @@
     <string name="user_name_title">User Name</string>
     <string name="user_name_hint">Enter User Name</string>
 
-    <string name="manage_account_contact">Add From Contact</string>
-    <string name="manage_account_dependent_phone_hint">Enter the notification phone number</string>
-    <string name="manage_account_password_hint">Password</string>
-    <string name="manage_account_email_hint">Email</string>
-    <string name="manage_account_name_hint">Name</string>
+    <string name="account_contact">Add From Contact</string>
+    <string name="account_dependent_phone_hint">Enter the notification phone number</string>
+    <string name="account_password_hint">Password</string>
+    <string name="account_email_hint">Email</string>
+    <string name="account_name_hint">Name</string>
 
     <string name="add_account_activity_title">Add Account</string>
 
