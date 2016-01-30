@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                         //if the clicked item has the identifier ADD_ACCOUNT add a new profile
                         Intent intent = null;
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
-                            Toast.makeText(sApplicationContext, "add account clicked.", Toast.LENGTH_LONG).show();
                             //TODO: Open add account activity
                             //TODO: Save profile
                             //TODO: Create profile drawer item from saved profile and show it in UI
@@ -167,9 +166,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             */
                         } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_MANAGE_ACCOUNT) {
-                            Toast.makeText(sApplicationContext, "manage account clicked.", Toast.LENGTH_LONG).show();
                             intent = new Intent(MainActivity.this, ManageAccountActivity.class);
-                            //TODO: Save changes
                             //TODO: update the UI
                         }else if(profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_USER) {
                             Toast.makeText(sApplicationContext, "The User", Toast.LENGTH_SHORT).show();

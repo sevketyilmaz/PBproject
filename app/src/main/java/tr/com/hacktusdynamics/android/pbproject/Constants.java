@@ -6,6 +6,7 @@ public class Constants {
      * */
     public static final String PREF_NAME = "PillBoxApp";
     public static final String PREF_GUEST_EXIST = "guestExist";
+    public static final String PREF_GUEST_UUID = "guestUUID";
     public static final String PREF_CURRENT_USER_UUID = "currentUUID";
 
 
