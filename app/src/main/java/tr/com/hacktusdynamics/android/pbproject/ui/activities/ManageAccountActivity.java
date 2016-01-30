@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -72,14 +71,12 @@ public class ManageAccountActivity extends AppCompatActivity {
         phoneView = (EditText) findViewById(R.id.manage_account_dependent_phone);
         phoneView.setText(userProfile.getDependentPhone());
 
-
         final Intent pickContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         contactButton = (Button) findViewById(R.id.manage_account_contact_button);
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivityForResult(pickContactIntent, REQUEST_CONTACT);
-                //Toast.makeText(ManageAccountActivity.this, "ContactButtonClicked", Toast.LENGTH_SHORT).show();
             }
         });
         //Handling the crash if there is no contact application on device
@@ -90,7 +87,6 @@ public class ManageAccountActivity extends AppCompatActivity {
     }
 
     public void imageClick(View view){
-        Toast.makeText(this,"ImageClicked", Toast.LENGTH_SHORT).show();
         //TODO: let user change the icon on the userProfile
     }
 
@@ -152,10 +148,15 @@ public class ManageAccountActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            Toast.makeText(this, "SaveClicked", Toast.LENGTH_SHORT).show();
-            //TODO: save Current User to the database
+            userProfile = new UserProfile(
+                    currentUUID,
+                    nameView.getText().toString(),
+                    emailView.getText().toString(),
+                    passwordView.getText().toString()
+            );
+            userProfile.setDependentPhone(phoneView.getText().toString());
+            myLab.updateUserProfile(userProfile);
             finish();
         }
 

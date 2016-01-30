@@ -106,6 +106,7 @@ public class MyLab {
         ContentValues contentValues = getUserProfileContentValues(userProfile);
         mDatabase.insert(UserProfileTable.NAME, null, contentValues);
     }
+
     public void updateUserProfile(UserProfile userProfile){
         String uuidString = userProfile.getId().toString();
         ContentValues contentValues = getUserProfileContentValues(userProfile);
