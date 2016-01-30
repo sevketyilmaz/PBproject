@@ -13,12 +13,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxBaseHelper;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserProfileTable;
 import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
 
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_USER;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_GUEST_UUID;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 /**
@@ -74,6 +76,7 @@ public class MyLab {
             while (!cursorWrapper.isAfterLast()){
                 IProfile p = cursorWrapper.getUserProfile();
                 p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+                p.withIdentifier(IDENTIFIER_USER);
                 profiles.add(p);
                 cursorWrapper.moveToNext();
             }
@@ -132,8 +135,8 @@ public class MyLab {
     }
 
     private void create10DummyBoxes(){
-        SharedPreferences sp = sApplicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
-        String guestProfile = sp.getString(Constants.PREF_GUEST_UUID, null);
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String guestProfile = sp.getString(PREF_GUEST_UUID, null);
         Box box;
         Date d;
         for(int i = 0; i < 10; i++){
@@ -146,14 +149,15 @@ public class MyLab {
 
     /**Creates guestProfile with SharedPreferences guestUUID*/
     private IProfile getGuestProfile() {
-        SharedPreferences sp = sApplicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
-        String guestUUID = sp.getString(Constants.PREF_GUEST_UUID, null);
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String guestUUID = sp.getString(PREF_GUEST_UUID, null);
         IProfile p = new UserProfile(guestUUID,
                 sApplicationContext.getString(R.string.profile_guest_name),
                 sApplicationContext.getString(R.string.profile_guest_email),
                 sApplicationContext.getString(R.string.profile_guest_password)
         );
         p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+        p.withIdentifier(IDENTIFIER_USER);
         return p;
     }
 

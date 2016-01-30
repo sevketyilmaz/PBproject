@@ -1,6 +1,7 @@
 package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,23 +27,22 @@ import java.util.List;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
+import tr.com.hacktusdynamics.android.pbproject.models.UserProfile;
 
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_HEADER_ADD_ACCOUNT;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_HEADER_MANAGE_ACCOUNT;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_ITEM_CREATE_ALARM;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_ITEM_HOME;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_ITEM_MEDICATIONS;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_STICKY_HELP;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_STICKY_SETTINGS;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_USER;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_CURRENT_USER_UUID;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int IDENTIFIER_HEADER_ADD_ACCOUNT = 1;
-    private static final int IDENTIFIER_HEADER_MANAGE_ACCOUNT = 2;
-
-    //main items
-    private static final int IDENTIFIER_ITEM_HOME= 10;
-    private static final int IDENTIFIER_ITEM_CREATE_ALARM = 11;
-    private static final int IDENTIFIER_ITEM_MEDICATIONS= 12;
-
-
-    //sticky items
-    private static final int IDENTIFIER_STICKY_SETTINGS = 20;
-    private static final int IDENTIFIER_STICKY_HELP = 21;
 
     //save our drawer or header
     private AccountHeader accountHeader = null;
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
-                        //if the clicked item has the identifier 1, add a new profile
+                        //if the clicked item has the identifier ADD_ACCOUNT add a new profile
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
                             Toast.makeText(sApplicationContext, "add account clicked.", Toast.LENGTH_LONG).show();
                             //TODO: Open add account activity
@@ -171,7 +171,18 @@ public class MainActivity extends AppCompatActivity {
                             //TODO: Open manage account activity
                             //TODO: Save changes
                             //TODO: update the UI
+                        }else if(profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_USER) {
+                            Toast.makeText(sApplicationContext, "The User", Toast.LENGTH_SHORT).show();
+                            SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+                            String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
+                            if(((UserProfile)profile).getId().toString().equalsIgnoreCase(currentUserUUIDString)){
+                                Toast.makeText(sApplicationContext, "SAME User", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(sApplicationContext, "Different User", Toast.LENGTH_SHORT).show();
+                            }
                         }
+
+
 
                         //false if you have not consumed the event And it should close the drawer
                         return false;
@@ -183,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<IProfile> getUserProfilesAndItems() {
         List<IProfile> p = myLab.getUserProfiles();
-        //TODO: when finish the Add Account activity, get other profiles and add to the list
 
         p.add(new ProfileSettingDrawerItem()
                 .withName(getString(R.string.add_account))

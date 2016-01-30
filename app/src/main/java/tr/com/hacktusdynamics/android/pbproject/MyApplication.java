@@ -22,6 +22,7 @@ public class MyApplication extends Application {
             String guestUUID = UUID.randomUUID().toString();
             SharedPreferences.Editor spe = sp.edit();
             spe.putString(Constants.PREF_GUEST_UUID, guestUUID);
+            spe.putString(Constants.PREF_CURRENT_USER_UUID, guestUUID);
             spe.commit();
         }
 
