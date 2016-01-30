@@ -2,7 +2,7 @@
 <manifest package="tr.com.hacktusdynamics.android.pbproject"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:name=".MyApplication"
@@ -33,6 +33,15 @@
         <activity
             android:name=".ui.activities.ManageAccountActivity"
             android:label="@string/manage_account_activity_title"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tr.com.hacktusdynamics.android.pbproject.ui.activities.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".ui.activities.AddAccountActivity"
+            android:label="@string/add_account_activity_title"
             android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

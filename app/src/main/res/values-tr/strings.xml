@@ -30,5 +30,6 @@
     <string name="manage_account_email_hint">Email</string>
     <string name="manage_account_name_hint">İsim</string>
 
+    <string name="add_account_activity_title">Hesap Ekle</string>
 
 </resources>

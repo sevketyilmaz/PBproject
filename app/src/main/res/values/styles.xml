@@ -23,7 +23,6 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 
-
     <style name="AppTheme.TextAppearanceRegister">
         <item name="android:textColor">@color/material_login_login_text_color</item>
         <item name="colorControlNormal">@color/material_login_login_text_color</item>

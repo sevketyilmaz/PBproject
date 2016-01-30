@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                         //if the clicked item has the identifier ADD_ACCOUNT add a new profile
                         Intent intent = null;
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
-                            //TODO: Open add account activity
+                            intent = new Intent(MainActivity.this, AddAccountActivity.class);
                             //TODO: Save profile
                             //TODO: Create profile drawer item from saved profile and show it in UI
                             /*

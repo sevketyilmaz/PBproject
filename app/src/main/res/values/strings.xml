@@ -30,5 +30,7 @@
     <string name="manage_account_email_hint">Email</string>
     <string name="manage_account_name_hint">Name</string>
 
+    <string name="add_account_activity_title">Add Account</string>
+
 
 </resources>
