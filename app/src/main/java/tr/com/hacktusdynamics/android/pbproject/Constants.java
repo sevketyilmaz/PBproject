@@ -5,11 +5,12 @@ public class Constants {
      * Shared Prefs and Keys for Values
      * */
     public static final String PREF_NAME = "PillBoxApp";
-    public static final String PREF_GUEST_UUID = "guestUUID";
+    public static final String PREF_GUEST_EXIST = "guestExist";
     public static final String PREF_CURRENT_USER_UUID = "currentUUID";
 
 
     /***/
+    //header items
     public static final int IDENTIFIER_HEADER_ADD_ACCOUNT = 1;
     public static final int IDENTIFIER_HEADER_MANAGE_ACCOUNT = 2;
     public static final int IDENTIFIER_USER = 3;

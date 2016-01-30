@@ -19,7 +19,7 @@ import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserPro
 import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
 
 import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_USER;
-import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_GUEST_UUID;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_CURRENT_USER_UUID;
 import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
@@ -69,7 +69,6 @@ public class MyLab {
     /** UserProfile portion of getters setters*/
     public List<IProfile> getUserProfiles(){
         List<IProfile> profiles = new ArrayList<>();
-        profiles.add(getGuestProfile());
         UserProfileCursorWrapper cursorWrapper = queryUserProfiles(null, null);
         try {
             cursorWrapper.moveToFirst();
@@ -136,7 +135,7 @@ public class MyLab {
 
     private void create10DummyBoxes(){
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String guestProfile = sp.getString(PREF_GUEST_UUID, null);
+        String guestProfile = sp.getString(PREF_CURRENT_USER_UUID, null);
         Box box;
         Date d;
         for(int i = 0; i < 10; i++){
@@ -145,20 +144,6 @@ public class MyLab {
             box.setBoxState(Box.BoxStates.FULL_CLOSE);
             addBox(box);
         }
-    }
-
-    /**Creates guestProfile with SharedPreferences guestUUID*/
-    private IProfile getGuestProfile() {
-        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String guestUUID = sp.getString(PREF_GUEST_UUID, null);
-        IProfile p = new UserProfile(guestUUID,
-                sApplicationContext.getString(R.string.profile_guest_name),
-                sApplicationContext.getString(R.string.profile_guest_email),
-                sApplicationContext.getString(R.string.profile_guest_password)
-        );
-        p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
-        p.withIdentifier(IDENTIFIER_USER);
-        return p;
     }
 
 }

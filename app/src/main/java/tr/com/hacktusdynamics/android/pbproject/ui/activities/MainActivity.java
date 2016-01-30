@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
                                     .withEmail("new@gmail.com")
                                     .withIcon(getResources().getDrawable(R.drawable.profile_new));
 
-
                             if (accountHeader.getProfiles() != null) {
                                 //we know that there are 2 setting elements. set the new profile above them
                                 accountHeader.addProfile(profileNew, accountHeader.getProfiles().size() - 2);
@@ -181,8 +180,6 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(sApplicationContext, "Different User", Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
 
                         //false if you have not consumed the event And it should close the drawer
                         return false;

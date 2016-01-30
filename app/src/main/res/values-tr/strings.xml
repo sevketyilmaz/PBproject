@@ -4,7 +4,7 @@
     <string name="action_settings">Ayarlar</string>
 
     <string name="profile_guest_name">Misafir Kullanıcı</string>
-    <string name="profile_guest_email">guest_pillbox@hacktusdynamics.com.tr</string>
+    <string name="profile_guest_email">misafir_kullanici@hacktusdynamics.com.tr</string>
     <string name="profile_guest_password">password</string>
     <string name="add_account">Hesap Ekle</string>
     <string name="add_account_description">Yeni bir hesap ekle.</string>
