@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    <!-- <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar.ActionBar.TranslucentStatus"> -->
+        <!-- <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar.ActionBar.TranslucentStatus"> -->
 
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -18,8 +18,35 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+
+
+    <style name="AppTheme.TextAppearanceRegister">
+        <item name="android:textColor">@color/material_login_login_text_color</item>
+        <item name="colorControlNormal">@color/material_login_login_text_color</item>
+        <item name="android:textColorHint">@color/material_login_login_text_color</item>
+        <item name="colorControlActivated">@color/material_login_login_text_color</item>
+        <item name="colorControlHighlight">@color/material_login_login_text_color</item>
+    </style>
+
+    <style name="AppTheme.TextAppearanceLogin">
+        <item name="android:textColor">@color/material_login_register_text_color</item>
+        <item name="colorControlNormal">@color/material_login_register_text_color</item>
+        <item name="android:textColorHint">@color/material_login_register_text_color</item>
+        <item name="colorControlActivated">@color/material_login_register_text_color</item>
+        <item name="colorControlHighlight">@color/material_login_register_text_color</item>
+    </style>
+
+    <style name="AppTheme.TextAppearanceLoginError" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/material_login_login_error_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearanceRegisterError" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/material_login_register_error_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

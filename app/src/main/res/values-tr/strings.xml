@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">İlaç Kutusu Uygulaması</string>
     <string name="action_settings">Ayarlar</string>
+    <string name="action_save">Kaydet</string>
 
     <string name="profile_guest_name">Misafir Kullanıcı</string>
     <string name="profile_guest_email">misafir_kullanici@hacktusdynamics.com.tr</string>
@@ -17,6 +18,17 @@
 
     <string name="section_format">Merhaba Dünya from section: %1$d</string>
     <string name="create_alarm_activity_title">İlaç Kutusu Alarmları Oluştur</string>
+
+    <string name="manage_account_activity_title">Hesapları Düzenle</string>
+
+    <string name="user_name_title">Kullanıcı Adı</string>
+    <string name="user_name_hint">Kullanıcı Adını Giriniz</string>
+
+    <string name="manage_account_contact">Rehberden Ekle</string>
+    <string name="manage_account_dependent_phone_hint">Uyarı gönderilecek telefonu giriniz</string>
+    <string name="manage_account_password_hint">Şifre</string>
+    <string name="manage_account_email_hint">Email</string>
+    <string name="manage_account_name_hint">İsim</string>
 
 
 </resources>

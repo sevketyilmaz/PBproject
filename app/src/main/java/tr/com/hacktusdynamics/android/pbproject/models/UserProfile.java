@@ -12,6 +12,7 @@ public class UserProfile extends ProfileDrawerItem {
 
     private UUID mId;
     private String mPassword;
+    private String mDependentPhone;
 
     //constructors
     /** Constructor
@@ -40,5 +41,13 @@ public class UserProfile extends ProfileDrawerItem {
 
     public void setPassword(String password) {
         mPassword = password;
+    }
+
+    public String getDependentPhone() {
+        return mDependentPhone;
+    }
+
+    public void setDependentPhone(String dependentPhone) {
+        mDependentPhone = dependentPhone;
     }
 }

@@ -22,7 +22,8 @@ public class PillBoxBaseHelper extends SQLiteOpenHelper {
                         UserProfileTable.Cols.UUID + ", " +
                         UserProfileTable.Cols.NAME + ", " +
                         UserProfileTable.Cols.EMAIL + ", " +
-                        UserProfileTable.Cols.PASSWORD + ")"
+                        UserProfileTable.Cols.PASSWORD + ", " +
+                        UserProfileTable.Cols.DEPENDENT_PHONE + ")"
         );
 
         //Create box table

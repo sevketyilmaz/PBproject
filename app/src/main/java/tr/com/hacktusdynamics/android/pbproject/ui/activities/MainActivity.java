@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier ADD_ACCOUNT add a new profile
+                        Intent intent = null;
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_ADD_ACCOUNT) {
                             Toast.makeText(sApplicationContext, "add account clicked.", Toast.LENGTH_LONG).show();
                             //TODO: Open add account activity
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             */
                         } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_HEADER_MANAGE_ACCOUNT) {
                             Toast.makeText(sApplicationContext, "manage account clicked.", Toast.LENGTH_LONG).show();
-                            //TODO: Open manage account activity
+                            intent = new Intent(MainActivity.this, ManageAccountActivity.class);
                             //TODO: Save changes
                             //TODO: update the UI
                         }else if(profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == IDENTIFIER_USER) {
@@ -179,6 +180,10 @@ public class MainActivity extends AppCompatActivity {
                             }else{
                                 Toast.makeText(sApplicationContext, "Different User", Toast.LENGTH_SHORT).show();
                             }
+                        }
+
+                        if(intent != null){
+                            MainActivity.this.startActivity(intent);
                         }
 
                         //false if you have not consumed the event And it should close the drawer

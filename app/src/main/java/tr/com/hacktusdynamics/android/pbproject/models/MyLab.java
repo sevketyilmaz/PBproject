@@ -94,7 +94,10 @@ public class MyLab {
             if (cursorWrapper.getCount() == 0)
                 return null;
             cursorWrapper.moveToFirst();
-            return (UserProfile)cursorWrapper.getUserProfile();
+            UserProfile p =(UserProfile)cursorWrapper.getUserProfile();
+            p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+            p.withIdentifier(IDENTIFIER_USER);
+            return p;
         }finally {
             cursorWrapper.close();
         }
@@ -117,6 +120,7 @@ public class MyLab {
         values.put(UserProfileTable.Cols.NAME, userProfile.getName().toString());
         values.put(UserProfileTable.Cols.EMAIL, userProfile.getEmail().toString());
         values.put(UserProfileTable.Cols.PASSWORD, userProfile.getPassword());
+        values.put(UserProfileTable.Cols.DEPENDENT_PHONE, userProfile.getDependentPhone());
         return values;
     }
 

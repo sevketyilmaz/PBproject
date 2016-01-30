@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="tr.com.hacktusdynamics.android.pbproject.ui.activities.ManageAccountActivity"
+    tools:showIn="@layout/activity_manage_account">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView android:id="@+id/manage_account_icon"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:onClick="imageClick"
+                android:paddingBottom="20dp"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/guest_avatar" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:errorTextAppearance="@style/AppTheme.TextAppearanceRegisterError"
+                app:theme="@style/AppTheme.TextAppearanceRegister">
+
+                <AutoCompleteTextView android:id="@+id/manage_account_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/manage_account_name_hint"
+                    android:inputType="textAutoComplete"
+                    android:textColor="@color/material_login_login_text_color"
+                    android:textSize="20sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:errorTextAppearance="@style/AppTheme.TextAppearanceRegisterError"
+                app:theme="@style/AppTheme.TextAppearanceRegister">
+
+                <AutoCompleteTextView android:id="@+id/manage_account_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/manage_account_email_hint"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/material_login_login_text_color"
+                    android:textSize="20sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:errorTextAppearance="@style/AppTheme.TextAppearanceRegisterError"
+                app:theme="@style/AppTheme.TextAppearanceRegister">
+
+                <EditText android:id="@+id/manage_account_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/manage_account_password_hint"
+                    android:inputType="textPassword"
+                    android:textColor="@color/material_login_login_text_color"
+                    android:textSize="20sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText android:id="@+id/manage_account_dependent_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/manage_account_dependent_phone_hint"
+                        android:inputType="phone"
+                        android:textColor="@color/material_login_login_text_color"
+                        android:textSize="20sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/manage_account_contact_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manage_account_contact"
+                    android:background="@drawable/contact_btn"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -19,8 +19,10 @@ public class UserProfileCursorWrapper extends CursorWrapper {
         String name = getString(getColumnIndex(UserProfileTable.Cols.NAME));
         String email = getString(getColumnIndex(UserProfileTable.Cols.EMAIL));
         String password = getString(getColumnIndex(UserProfileTable.Cols.PASSWORD));
+        String dependentPhone = getString(getColumnIndex(UserProfileTable.Cols.DEPENDENT_PHONE));
 
         IProfile profile = new UserProfile(uuidString, name, email, password);
+        ((UserProfile)profile).setDependentPhone(dependentPhone);
         return profile;
     }
 }
