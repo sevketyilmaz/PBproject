@@ -33,7 +33,6 @@ public class AddAccountActivity extends AppCompatActivity {
     private String currentUUID;
     private UserProfile userProfile;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

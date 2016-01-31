@@ -115,6 +115,12 @@ public class MyLab {
                 new String[]{uuidString});
     }
 
+    public void deleteUserProfile(String uuidString){
+        mDatabase.delete(UserProfileTable.NAME,
+                UserProfileTable.Cols.UUID + " = ?",
+                new String[]{uuidString});
+    }
+
     private static ContentValues getUserProfileContentValues(UserProfile userProfile){
         ContentValues values = new ContentValues();
         values.put(UserProfileTable.Cols.UUID, userProfile.getId().toString());

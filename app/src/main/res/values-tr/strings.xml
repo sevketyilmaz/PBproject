@@ -3,6 +3,7 @@
     <string name="app_name">İlaç Kutusu Uygulaması</string>
     <string name="action_settings">Ayarlar</string>
     <string name="action_save">Kaydet</string>
+    <string name="action_delete">Sil</string>
 
     <string name="profile_guest_name">Misafir Kullanıcı</string>
     <string name="profile_guest_email">misafir_kullanici@hacktusdynamics.com.tr</string>
@@ -20,6 +21,9 @@
     <string name="create_alarm_activity_title">İlaç Kutusu Alarmları Oluştur</string>
 
     <string name="manage_account_activity_title">Hesapları Düzenle</string>
+    <string name="delete_message">Bu kullanıcıyı silmek istediğinize emin misiniz?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
 
     <string name="user_name_title">Kullanıcı Adı</string>
     <string name="user_name_hint">Kullanıcı Adını Giriniz</string>
@@ -31,5 +35,7 @@
     <string name="account_name_hint">İsim</string>
 
     <string name="add_account_activity_title">Hesap Ekle</string>
+
+
 
 </resources>
