@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         myLab = MyLab.get(sApplicationContext);
 
+
         //create the account header
         buildHeader(false, savedInstanceState);
 
@@ -174,8 +175,13 @@ public class MainActivity extends AppCompatActivity {
                             String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
                             if(((UserProfile)profile).getId().toString().equalsIgnoreCase(currentUserUUIDString)){
                                 Toast.makeText(sApplicationContext, "SAME User", Toast.LENGTH_SHORT).show();
+                                //TODO:
                             }else{
                                 Toast.makeText(sApplicationContext, "Different User", Toast.LENGTH_SHORT).show();
+                                //TODO:
+                                SharedPreferences.Editor spe = sp.edit();
+                                spe.putString(PREF_CURRENT_USER_UUID, ((UserProfile)profile).getId().toString());
+                                spe.commit();
                             }
                         }
 

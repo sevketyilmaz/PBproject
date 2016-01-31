@@ -10,6 +10,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.UUID;
+
+import tr.com.hacktusdynamics.android.pbproject.MyApplication;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 import tr.com.hacktusdynamics.android.pbproject.models.UserProfile;
@@ -40,6 +43,14 @@ public class AddAccountActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
 
+        myLab = MyLab.get(MyApplication.sApplicationContext);
+
+        /** Initialize the UI*/
+        nameView = (AutoCompleteTextView) findViewById(R.id.add_account_name);
+        emailView = (AutoCompleteTextView) findViewById(R.id.add_account_email);
+        passwordView = (EditText) findViewById(R.id.add_account_password);
+        phoneView = (EditText) findViewById(R.id.add_account_dependent_phone);
+        contactButton = (Button) findViewById(R.id.add_account_contact_button);
     }
 
     @Override
@@ -57,7 +68,14 @@ public class AddAccountActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            //TODO: create the account
+            userProfile = new UserProfile(
+                    UUID.randomUUID().toString(),
+                    nameView.getText().toString(),
+                    emailView.getText().toString(),
+                    passwordView.getText().toString()
+            );
+            userProfile.setDependentPhone(phoneView.getText().toString());
+            myLab.addUserProfile(userProfile);
             finish();
         }
 
