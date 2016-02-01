@@ -34,21 +34,35 @@ public class Box implements Serializable, Comparable<Box> {
 
     //Constructors
     public Box(int boxNumber, String userProfileId){
-        this(boxNumber, null, userProfileId);
+        this(null, boxNumber, null, null, -1, userProfileId);
     }
 
-    public Box(int boxNumber, Date alarmDateTime, String userProfileId){
-        mId = UUID.randomUUID();
-        createdTime = new Date();
+    /**
+     * Returns the box object
+     * @param uuid null for random UUID
+     * @param boxNumber box number for creation
+     * @param alarmDateTime null for current time
+     * @param createdTime null for current time
+     * @param boxS integer box state, if less then zero set EMPTY_CLOSE
+     * @param userProfileId which user created the box
+     */
+    public Box(String uuid, int boxNumber, Date alarmDateTime, Date createdTime, int boxS, String userProfileId){
+        setId(uuid); //null for random UUID
         setBoxNumber(boxNumber);
-        setAlarmTime(alarmDateTime);
-        setCreatedTime(null); //null for current datetime
+        setAlarmTime(alarmDateTime); //null for current datetime
+        setCreatedTime(createdTime); //null for current datetime
+        setBoxState(getBoxStateFromInt(boxS)); //any value other than 0,1,2,3 is EMPTY_CLOSE
         setUserProfileId(userProfileId);
     }
 
     //setters getters
     public UUID getId(){
         return mId;
+    }
+    public void setId(String uuid){
+        if(uuid == null)
+            this.mId = UUID.randomUUID();
+        this.mId = UUID.fromString(uuid);
     }
 
     public Date getCreatedTime(){
@@ -111,6 +125,27 @@ public class Box implements Serializable, Comparable<Box> {
                 break;
         }
         return bState;
+    }
+
+    public BoxStates getBoxStateFromInt(int boxS){
+        BoxStates state = BoxStates.EMPTY_CLOSE;
+        switch (boxS){
+            case 0:
+                state = BoxStates.EMPTY_CLOSE;
+                break;
+            case 1:
+                state = BoxStates.EMPTY_OPEN;
+                break;
+            case 2:
+                state = BoxStates.FULL_CLOSE;
+                break;
+            case 3:
+                state = BoxStates.FULL_OPEN;
+                break;
+            default: //boxS = -1
+                break;
+        }
+        return state;
     }
 
     @Override

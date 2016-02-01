@@ -2,25 +2,23 @@ package tr.com.hacktusdynamics.android.pbproject.models;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.database.BoxCursorWrapper;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxBaseHelper;
+import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.BoxTable;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserProfileTable;
 import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
 
 import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_USER;
-import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_CURRENT_USER_UUID;
-import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 /**
@@ -54,16 +52,51 @@ public class MyLab {
     //setters getters
     /**Box portion of getters setters*/
     public List<Box> getBoxes(){
-        return null;
+        List<Box> boxes = new ArrayList<>();
+        BoxCursorWrapper cursorWrapper = queryBox(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()){
+                Box box = cursorWrapper.getBox();
+                boxes.add(box);
+                cursorWrapper.moveToNext();
+            }
+        }finally {
+            cursorWrapper.close();
+        }
+        return boxes;
     }
+
     public Box getBox(UUID id){
-        return null;
+        BoxCursorWrapper cursorWrapper = queryBox(
+                BoxTable.Cols.UUID + " = ?",
+                new String[]{id.toString()}
+        );
+        try {
+            if (cursorWrapper.getCount() == 0)
+                return null;
+            cursorWrapper.moveToFirst();
+            Box box = cursorWrapper.getBox();
+            return box;
+        }finally {
+            cursorWrapper.close();
+        }
     }
     public void addBox(Box box){
-
+        ContentValues contentValues = getBoxContentValues(box);
+        mDatabase.insert(BoxTable.NAME, null, contentValues);
     }
     public void updateBox(Box box){
-
+        String uuidString = box.getId().toString();
+        ContentValues contentValues = getBoxContentValues(box);
+        mDatabase.update(BoxTable.NAME, contentValues,
+                BoxTable.Cols.UUID + " = ?",
+                new String[]{uuidString});
+    }
+    public void deleteBox(String boxUUID){
+        mDatabase.delete(UserProfileTable.NAME,
+                BoxTable.Cols.UUID + " = ?",
+                new String[]{boxUUID});
     }
 
     /** UserProfile portion of getters setters*/
@@ -144,6 +177,30 @@ public class MyLab {
         return new UserProfileCursorWrapper(cursor);
     }
 
+    private static ContentValues getBoxContentValues(Box box){
+        ContentValues values = new ContentValues();
+        values.put(BoxTable.Cols.UUID, box.getId().toString());
+        values.put(BoxTable.Cols.BOX_NUMBER, box.getBoxNumber());
+        values.put(BoxTable.Cols.ALARM_DATE, box.getAlarmTime().getTime());
+        values.put(BoxTable.Cols.CREATED_DATE, box.getCreatedTime().getTime());
+        values.put(BoxTable.Cols.BOX_STATE, box.getBoxStateInt());
+        values.put(BoxTable.Cols.USER_PROFILE_ID, box.getUserProfileId());
+        return values;
+    }
+
+    private BoxCursorWrapper queryBox(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(
+                BoxTable.NAME,
+                null, //null select all columns
+                whereClause,
+                whereArgs,
+                null, //group by
+                null, //having
+                null //order by
+        );
+        return new BoxCursorWrapper(cursor);
+    }
+/*
     private void create10DummyBoxes(){
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String guestProfile = sp.getString(PREF_CURRENT_USER_UUID, null);
@@ -156,5 +213,5 @@ public class MyLab {
             addBox(box);
         }
     }
-
+*/
 }
