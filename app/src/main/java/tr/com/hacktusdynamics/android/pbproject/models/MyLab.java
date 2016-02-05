@@ -2,12 +2,15 @@ package tr.com.hacktusdynamics.android.pbproject.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +22,8 @@ import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserPro
 import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
 
 import static tr.com.hacktusdynamics.android.pbproject.Constants.IDENTIFIER_USER;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_CURRENT_USER_UUID;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 /**
@@ -200,18 +205,20 @@ public class MyLab {
         );
         return new BoxCursorWrapper(cursor);
     }
-/*
+
     private void create10DummyBoxes(){
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String guestProfile = sp.getString(PREF_CURRENT_USER_UUID, null);
+        String userProfile = sp.getString(PREF_CURRENT_USER_UUID, null);
+        Log.d(TAG, "CurrentUserProfile :" + userProfile);
         Box box;
         Date d;
+        Date createdDate = new Date(System.currentTimeMillis());
         for(int i = 0; i < 10; i++){
             d = new Date((System.currentTimeMillis() + (i * 1000 * 60 * 60)));
-            box = new Box(i, d, guestProfile);
+            box = new Box(null, i, d, createdDate, -1, userProfile);
             box.setBoxState(Box.BoxStates.FULL_CLOSE);
             addBox(box);
         }
     }
-*/
+
 }

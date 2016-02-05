@@ -33,18 +33,19 @@ public class Box implements Serializable, Comparable<Box> {
     }
 
     //Constructors
-    public Box(int boxNumber, String userProfileId){
-        this(null, boxNumber, null, null, -1, userProfileId);
+    public Box(int boxNumber, Date alarmDateTime, String userProfileId){
+        this(null, boxNumber, alarmDateTime, null, -1, userProfileId);
     }
 
     /**
-     * Returns the box object
      * @param uuid null for random UUID
      * @param boxNumber box number for creation
      * @param alarmDateTime null for current time
      * @param createdTime null for current time
      * @param boxS integer box state, if less then zero set EMPTY_CLOSE
      * @param userProfileId which user created the box
+     *
+     * @return Returns the box object
      */
     public Box(String uuid, int boxNumber, Date alarmDateTime, Date createdTime, int boxS, String userProfileId){
         setId(uuid); //null for random UUID
@@ -62,7 +63,8 @@ public class Box implements Serializable, Comparable<Box> {
     public void setId(String uuid){
         if(uuid == null)
             this.mId = UUID.randomUUID();
-        this.mId = UUID.fromString(uuid);
+        else
+            this.mId = UUID.fromString(uuid);
     }
 
     public Date getCreatedTime(){

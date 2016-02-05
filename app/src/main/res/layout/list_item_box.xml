@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView android:id="@+id/box_number_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/box_number"
+        android:textStyle="bold"
+        android:textSize="22sp" />
+
+    <TextView android:id="@+id/box_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:textSize="22sp"
+        android:textColor="@color/colorPrimary"
+        android:text="0"
+        android:layout_toRightOf="@id/box_number_title" />
+
+
+
+    <TextView android:id="@+id/alarm_datetime_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/alarm_date_and_time"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/box_number_title"/>
+
+    <TextView android:id="@+id/alarm_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:text="..."
+        android:layout_toRightOf="@id/alarm_datetime_title"
+        android:layout_below="@id/box_number_title"/>
+
+
+
+    <TextView android:id="@+id/box_state_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/box_state"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/alarm_datetime_title"/>
+
+    <TextView android:id="@+id/box_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorAccent"
+        android:text="..."
+        android:layout_toRightOf="@id/box_state_title"
+        android:layout_below="@id/alarm_datetime_title"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

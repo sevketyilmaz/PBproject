@@ -36,6 +36,13 @@
 
     <string name="add_account_activity_title">Hesap Ekle</string>
 
-
+    <string name="empty_element_text">İlaç kutuları için alarm oluşturulmamış</string>
+    <string name="box_number">Kutu Numarası :</string>
+    <string name="alarm_date_and_time">Alarm Tarih ve Saati :</string>
+    <string name="box_state">Kutu Durumu :</string>
+    <plurals name="subtitle_plural">
+        <item quantity="one">%1$s kutu</item>
+        <item quantity="other">%1$s kutu</item>
+    </plurals>
 
 </resources>

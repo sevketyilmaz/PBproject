@@ -19,9 +19,7 @@ public class UserProfile extends ProfileDrawerItem {
      * @param uuid if null, creates random UUID
      */
     public UserProfile(String uuid){
-        if(uuid == null)
-            mId = UUID.randomUUID();
-        mId = UUID.fromString(uuid);
+        setId(uuid);
     }
     public UserProfile(String uuid, String name, String email, String password){
         this(uuid);
@@ -34,11 +32,17 @@ public class UserProfile extends ProfileDrawerItem {
     public UUID getId() {
         return mId;
     }
+    public void setId(String uuid) {
+        if(uuid == null){
+            this.mId = UUID.randomUUID();
+        }else {
+            this.mId = UUID.fromString(uuid);
+        }
+    }
 
     public String getPassword() {
         return mPassword;
     }
-
     public void setPassword(String password) {
         mPassword = password;
     }
@@ -46,7 +50,6 @@ public class UserProfile extends ProfileDrawerItem {
     public String getDependentPhone() {
         return mDependentPhone;
     }
-
     public void setDependentPhone(String dependentPhone) {
         mDependentPhone = dependentPhone;
     }
