@@ -24,6 +24,7 @@
     <string name="delete_message">Bu kullanıcıyı silmek istediğinize emin misiniz?</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
+    <string name="cannot_delete_guest">Misafir kullanıcıyı silemezsiniz.</string>
 
     <string name="user_name_title">Kullanıcı Adı</string>
     <string name="user_name_hint">Kullanıcı Adını Giriniz</string>

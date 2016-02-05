@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class ManageAccountActivity extends AppCompatActivity {
 
     private SharedPreferences sp;
     private MyLab myLab = null;
+    private String guestUUID;
     private String currentUUID;
     private UserProfile userProfile;
 
@@ -56,6 +58,7 @@ public class ManageAccountActivity extends AppCompatActivity {
 
         /** Getting current UserProfile for UI */
         sp = sApplicationContext.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        guestUUID = sp.getString(Constants.PREF_GUEST_UUID, null);
         currentUUID = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
         myLab = MyLab.get(sApplicationContext);
         userProfile = myLab.getUserProfile(UUID.fromString(currentUUID));
@@ -163,23 +166,27 @@ public class ManageAccountActivity extends AppCompatActivity {
         }
 
         if(id == R.id.action_delete){
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage(getString(R.string.delete_message));
+            if(guestUUID.equalsIgnoreCase(currentUUID)) {
+                Toast.makeText(this, R.string.cannot_delete_guest, Toast.LENGTH_SHORT).show();
+            }else{
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.delete_message));
 
-            alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    myLab.deleteUserProfile(currentUUID);
-                    finish();
-                }
-            });
-            alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {}
-            });
+                alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myLab.deleteUserProfile(currentUUID);
+                        finish();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

@@ -24,6 +24,7 @@
     <string name="delete_message">Are you sure,You wanted to delete this user?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="cannot_delete_guest">You cannot delete Guest User</string>
 
     <string name="user_name_title">User Name</string>
     <string name="user_name_hint">Enter User Name</string>
