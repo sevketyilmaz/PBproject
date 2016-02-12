@@ -41,6 +41,8 @@
     <string name="box_number">Kutu Numarası :</string>
     <string name="alarm_date_and_time">Alarm Tarih ve Saati :</string>
     <string name="box_state">Kutu Durumu :</string>
+    <string name="toggle_off">off</string>
+    <string name="toggle_on">on</string>
     <plurals name="subtitle_plural">
         <item quantity="one">%1$s kutu</item>
         <item quantity="other">%1$s kutu</item>

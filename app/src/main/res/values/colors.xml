@@ -24,4 +24,10 @@
     <color name="material_login_register_error_color">#ffcdce</color>
     <color name="material_login_login_text_color">#000</color>
     <color name="material_login_register_text_color">#000</color>
+
+    <!--  AlarmCardView -->
+    <color name="alarm_cardview_background">#fdfdfd</color>
+    <color name="alarm_cardview_separator_color">#dcdcdc</color>
+    <color name="alarm_cardview_title_color">#212121</color>
+    <color name="alarm_cardview_date_time_color">#757575</color>
 </resources>
