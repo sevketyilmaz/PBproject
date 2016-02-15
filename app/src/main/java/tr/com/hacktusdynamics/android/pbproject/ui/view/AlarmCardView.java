@@ -34,6 +34,7 @@ public class AlarmCardView extends CardView {
     private static final String KEY_SUPER_STATE = "superState";
     private static final String KEY_DATE_TEXT = "dateText";
     private static final String KEY_TIME_TEXT = "timeText";
+    private static final String KEY_STATE_TOGGLE = "stateToggle";
 
     private Button timeButton;
     private ToggleButton toggleButton;
@@ -41,16 +42,19 @@ public class AlarmCardView extends CardView {
     private ImageView boxNumberImageView;
 
     private String mDateString, mTimeString;
-    private boolean mStateToggle = false; //keeps toggle button state
-    private long mBoxAlarmDateTime = 0L; //keeps date and time
+    private boolean mStateToggle; //keeps toggle button state
+    private long mBoxAlarmDateTime; //keeps date and time
     private Drawable mImageDrawable;
 
     private CompoundButton.OnCheckedChangeListener onToggleButtonClickListener;
     private View.OnClickListener onTimeButtonClickListener;
 
     public AlarmCardView(Context context) {
+        /*
         super(context);
         init();
+        */
+        this(context, null);
     }
 
     public AlarmCardView(Context context, AttributeSet attrs) {
@@ -81,7 +85,7 @@ public class AlarmCardView extends CardView {
         dateTextView = (TextView) findViewById(R.id.date_tv);
         timeTextView = (TextView) findViewById(R.id.time_tv);
         boxNumberImageView = (ImageView) findViewById(R.id.box_number_iv);
-
+/*
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -91,10 +95,21 @@ public class AlarmCardView extends CardView {
                 Log.d(TAG, "inside toggle btn clicked");
                 Log.d(TAG, "mBoxAlarmDateTime: " + mBoxAlarmDateTime);
 
-                /** Do work from Activty onClickListener*/
+                // Do work from Activty onClickListener
                 if (onToggleButtonClickListener != null) {
                     onToggleButtonClickListener.onCheckedChanged(buttonView, isChecked);
                 }
+            }
+        });
+*/
+
+        toggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleButton.setTextColor(getStateToggle() ? Color.GREEN : Color.RED);
+                setStateToggle(!getStateToggle());
+                Log.d(TAG, "inside toggle btn clicked");
+                Log.d(TAG, "mBoxAlarmDateTime1: " + mBoxAlarmDateTime);
             }
         });
 
@@ -102,7 +117,7 @@ public class AlarmCardView extends CardView {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "inside time btn clicked");
-                setTimeString("Morning");
+                //setTimeString("Morning");
 
                 final View dialogView = View.inflate(getContext(), R.layout.custom_datetime_dialog, null);
                 final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
@@ -119,9 +134,6 @@ public class AlarmCardView extends CardView {
                                 timePicker.getCurrentHour(),
                                 timePicker.getCurrentMinute());
 
-                        toggleButton.setChecked(true); //after choosing date and time setting toggle button On. This coz togglebutton.OncheckedChanged() call
-                        setBoxAlarmDateTime(calendar.getTime().getTime());//after choosing date and time save datetime on member variable
-
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                         String timeString = sdf.format(calendar.getTime());
 
@@ -131,8 +143,11 @@ public class AlarmCardView extends CardView {
                         sdf = new SimpleDateFormat("d MMM yyyy");
                         String dateString = sdf.format(new Date(year - 1900, month, day));
 
+                        setBoxAlarmDateTime(calendar.getTime().getTime());//after choosing date and time save datetime on member variable
+                        setStateToggle(true);
                         setDateString(dateString);
                         setTimeString(timeString);
+                        Log.d(TAG, "mBoxAlarmDateTime2: " + mBoxAlarmDateTime);
 
                         alertDialog.dismiss();
                     }
@@ -154,6 +169,7 @@ public class AlarmCardView extends CardView {
         handleBoxNumberImageView();
         handleTimeTextView();
         handleDateTextView();
+        handleToggleButton();
     }
 
     private void handleBoxNumberImageView() {
@@ -172,6 +188,10 @@ public class AlarmCardView extends CardView {
         if(mDateString != null){
             dateTextView.setText(mDateString);
         }
+    }
+
+    private void handleToggleButton(){
+        toggleButton.setChecked(mStateToggle);
     }
 
     //getters setters
@@ -238,6 +258,7 @@ public class AlarmCardView extends CardView {
         bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState());
         bundle.putString(KEY_DATE_TEXT, mDateString);
         bundle.putString(KEY_TIME_TEXT, mTimeString);
+        bundle.putBoolean(KEY_STATE_TOGGLE, mStateToggle);
         return bundle;
     }
 
@@ -247,6 +268,7 @@ public class AlarmCardView extends CardView {
             Bundle bundle = (Bundle) state;
             mDateString = bundle.getString(KEY_DATE_TEXT);
             mTimeString = bundle.getString(KEY_TIME_TEXT);
+            mStateToggle = bundle.getBoolean(KEY_STATE_TOGGLE);
             super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATE));
         }else {
             super.onRestoreInstanceState(state);
