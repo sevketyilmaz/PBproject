@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
-    tools:context="tr.com.hacktusdynamics.android.siltabbed.ui.fragments.PlaceHolderFragment">
+    tools:context="tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment">
 
     <TextView
         android:id="@+id/section_label"

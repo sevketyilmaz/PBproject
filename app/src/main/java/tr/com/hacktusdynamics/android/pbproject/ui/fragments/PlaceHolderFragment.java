@@ -17,6 +17,8 @@ import tr.com.hacktusdynamics.android.pbproject.ui.view.AlarmCardView;
 
 /**
  * A placeholder fragment containing a simple view.
+ * TODO: onCreateView update the view from stored array longs (long[] alarms) in MyLab or Activity
+ * so that we can store the state of the view while swapping
  */
 public class PlaceHolderFragment extends Fragment {
     private static final String TAG = PlaceHolderFragment.class.getSimpleName();
@@ -42,7 +44,7 @@ public class PlaceHolderFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
-        fragment.setRetainInstance(true);
+        //fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -62,6 +64,7 @@ public class PlaceHolderFragment extends Fragment {
                 .endConfig()
                 .buildRoundRect(Integer.toString(mSectionNumber * 3), Color.GREEN, 40);
         mAlarmCardView1.setImageDrawable(boxNumberDrawable);
+        mAlarmCardView1.setBoxNumber(mSectionNumber * 3);
 
         mAlarmCardView2 = (AlarmCardView) rootView.findViewById(R.id.alarm_card2);
         boxNumberDrawable = TextDrawable.builder()
@@ -72,6 +75,7 @@ public class PlaceHolderFragment extends Fragment {
                 .endConfig()
                 .buildRoundRect(Integer.toString((mSectionNumber*3)-1), Color.GREEN, 40);
         mAlarmCardView2.setImageDrawable(boxNumberDrawable);
+        mAlarmCardView2.setBoxNumber((mSectionNumber * 3) - 1);
 
         mAlarmCardView3 = (AlarmCardView) rootView.findViewById(R.id.alarm_card3);
         boxNumberDrawable = TextDrawable.builder()
@@ -82,6 +86,7 @@ public class PlaceHolderFragment extends Fragment {
                 .endConfig()
                 .buildRoundRect(Integer.toString((mSectionNumber*3)-2), Color.GREEN, 40);
         mAlarmCardView3.setImageDrawable(boxNumberDrawable);
+        mAlarmCardView3.setBoxNumber((mSectionNumber * 3) - 2);
 
         Log.d(TAG, "onCreateView()" + mSectionNumber);
         return rootView;

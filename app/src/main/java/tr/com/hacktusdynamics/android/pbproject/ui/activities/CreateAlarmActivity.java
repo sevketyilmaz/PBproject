@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,27 @@ import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 
 public class CreateAlarmActivity extends AppCompatActivity {
+    private static final String TAG = CreateAlarmActivity.class.getSimpleName();
+
+    private Long[] mAlarms;
+
+    public Long[] getAlarms() {
+        return mAlarms;
+    }
+
+    public String showAlarms(){
+        StringBuilder sb = new StringBuilder();
+        for(Long l : mAlarms){
+            sb.append(l.toString() + " - ");
+        }
+        return sb.toString();
+    }
+    public void addAlarm(int boxNumber, long dateTime){
+        mAlarms[boxNumber-1] = dateTime;
+    }
+    public long getAlarm(int boxNumber){
+        return mAlarms[boxNumber-1];
+    }
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -72,6 +94,12 @@ public class CreateAlarmActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        mAlarms = new Long[21];
+        for(int i = 0; i<21; i++)
+            mAlarms[i]=new Long(0L);
+
+        Log.d(TAG, showAlarms());
 
     }
 

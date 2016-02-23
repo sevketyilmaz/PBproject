@@ -43,6 +43,8 @@
     <string name="box_state">Kutu Durumu :</string>
     <string name="toggle_off">off</string>
     <string name="toggle_on">on</string>
+    <string name="date_tv_text">tarih ...</string>
+    <string name="time_tv_text">saat ...</string>
     <plurals name="subtitle_plural">
         <item quantity="one">%1$s kutu</item>
         <item quantity="other">%1$s kutu</item>

@@ -43,6 +43,8 @@
     <string name="box_state">Box State :</string>
     <string name="toggle_off">off</string>
     <string name="toggle_on">on</string>
+    <string name="date_tv_text">date text</string>
+    <string name="time_tv_text">time text</string>
     <plurals name="subtitle_plural">
         <item quantity="one">%1$s box</item>
         <item quantity="other">%1$s boxes</item>

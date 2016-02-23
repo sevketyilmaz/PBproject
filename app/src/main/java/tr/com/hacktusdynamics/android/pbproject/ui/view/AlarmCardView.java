@@ -34,7 +34,8 @@ public class AlarmCardView extends CardView {
     private static final String KEY_SUPER_STATE = "superState";
     private static final String KEY_DATE_TEXT = "dateText";
     private static final String KEY_TIME_TEXT = "timeText";
-    private static final String KEY_STATE_TOGGLE = "stateToggle";
+    //private static final String KEY_STATE_TOGGLE = "stateToggle";
+    private static final String KEY_BOX_NUMBER = "boxNumber";
 
     private Button timeButton;
     private ToggleButton toggleButton;
@@ -42,8 +43,9 @@ public class AlarmCardView extends CardView {
     private ImageView boxNumberImageView;
 
     private String mDateString, mTimeString;
-    private boolean mStateToggle; //keeps toggle button state
-    private long mBoxAlarmDateTime; //keeps date and time
+    //private boolean mStateToggle; //keeps toggle button state
+    private long mBoxAlarmDateTime = 0L; //keeps date and time
+    private int mBoxNumber; //keeps the box number
     private Drawable mImageDrawable;
 
     private CompoundButton.OnCheckedChangeListener onToggleButtonClickListener;
@@ -85,15 +87,41 @@ public class AlarmCardView extends CardView {
         dateTextView = (TextView) findViewById(R.id.date_tv);
         timeTextView = (TextView) findViewById(R.id.time_tv);
         boxNumberImageView = (ImageView) findViewById(R.id.box_number_iv);
-/*
+
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                toggleButton.setTextColor(isChecked ? Color.GREEN : Color.RED);
-                setStateToggle(isChecked);
+                //toggleButton.setTextColor(isChecked ? Color.GREEN : Color.RED);
+                //setStateToggle(isChecked);
+                if(isChecked){ /** from False to True */
+                    if(mBoxAlarmDateTime != 0){ // if ever date and time setted (mBoxAlarmDateTime != 0) then allow it, and return the setted date and time text back and SAVE IT
+                        toggleButton.setTextColor(Color.GREEN);
 
-                Log.d(TAG, "inside toggle btn clicked");
-                Log.d(TAG, "mBoxAlarmDateTime: " + mBoxAlarmDateTime);
+                        Date date = new Date(mBoxAlarmDateTime);
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        String timeString = sdf.format(date);
+                        sdf = new SimpleDateFormat("d MMM yyyy");
+                        String dateString = sdf.format(date);
+
+                        setDateString(dateString);
+                        setTimeString(timeString);
+
+                        //TODO: SAVE IT
+                    }else{ // mBoxAlarmDateTime == 0 then toggleButton remains false
+                        toggleButton.setChecked(false);
+                    }
+                }else { /** from True to False */
+                    // Clear the date and time text but let mBoxAlarmDateTime as it is and DELETE IT
+                    toggleButton.setTextColor(Color.RED);
+
+                    setDateString(getContext().getResources().getString(R.string.date_tv_text));
+                    setTimeString(getContext().getResources().getString(R.string.time_tv_text));
+                    //TODO: DELETE IT
+                }
+
+                Log.d(TAG, "Toggle btn Checked Changed...");
+                Log.d(TAG, "BoxNumber: " + mBoxNumber + "  *****");
+                Log.d(TAG, "mBoxAlarmDateTime1: " + mBoxAlarmDateTime );
 
                 // Do work from Activty onClickListener
                 if (onToggleButtonClickListener != null) {
@@ -101,8 +129,9 @@ public class AlarmCardView extends CardView {
                 }
             }
         });
-*/
 
+
+/*
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,11 +141,12 @@ public class AlarmCardView extends CardView {
                 Log.d(TAG, "mBoxAlarmDateTime1: " + mBoxAlarmDateTime);
             }
         });
+*/
 
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "inside time btn clicked");
+                Log.d(TAG, "time btn clicked /n");
                 //setTimeString("Morning");
 
                 final View dialogView = View.inflate(getContext(), R.layout.custom_datetime_dialog, null);
@@ -144,11 +174,9 @@ public class AlarmCardView extends CardView {
                         String dateString = sdf.format(new Date(year - 1900, month, day));
 
                         setBoxAlarmDateTime(calendar.getTime().getTime());//after choosing date and time save datetime on member variable
-                        setStateToggle(true);
+                        toggleButton.setChecked(true);//setStateToggle(true);
                         setDateString(dateString);
                         setTimeString(timeString);
-                        Log.d(TAG, "mBoxAlarmDateTime2: " + mBoxAlarmDateTime);
-
                         alertDialog.dismiss();
                     }
                 });
@@ -169,7 +197,7 @@ public class AlarmCardView extends CardView {
         handleBoxNumberImageView();
         handleTimeTextView();
         handleDateTextView();
-        handleToggleButton();
+        //handleToggleButton();
     }
 
     private void handleBoxNumberImageView() {
@@ -190,9 +218,11 @@ public class AlarmCardView extends CardView {
         }
     }
 
+/*
     private void handleToggleButton(){
         toggleButton.setChecked(mStateToggle);
     }
+*/
 
     //getters setters
     public CompoundButton.OnCheckedChangeListener getOnToggleButtonClickListener() {
@@ -209,6 +239,7 @@ public class AlarmCardView extends CardView {
         this.onTimeButtonClickListener = onTimeButtonClickListener;
     }
 
+/*
     public boolean getStateToggle() {
         return mStateToggle;
     }
@@ -216,6 +247,7 @@ public class AlarmCardView extends CardView {
         mStateToggle = state;
         refresh();
     }
+*/
 
     public long getBoxAlarmDateTime() {
         return mBoxAlarmDateTime;
@@ -252,13 +284,21 @@ public class AlarmCardView extends CardView {
         refresh();
     }
 
+    public int getBoxNumber() {
+        return mBoxNumber;
+    }
+    public void setBoxNumber(int boxNumber) {
+        mBoxNumber = boxNumber;
+    }
+
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState());
         bundle.putString(KEY_DATE_TEXT, mDateString);
         bundle.putString(KEY_TIME_TEXT, mTimeString);
-        bundle.putBoolean(KEY_STATE_TOGGLE, mStateToggle);
+//        bundle.putBoolean(KEY_STATE_TOGGLE, mStateToggle);
+        bundle.putInt(KEY_BOX_NUMBER, mBoxNumber);
         return bundle;
     }
 
@@ -268,7 +308,8 @@ public class AlarmCardView extends CardView {
             Bundle bundle = (Bundle) state;
             mDateString = bundle.getString(KEY_DATE_TEXT);
             mTimeString = bundle.getString(KEY_TIME_TEXT);
-            mStateToggle = bundle.getBoolean(KEY_STATE_TOGGLE);
+//            mStateToggle = bundle.getBoolean(KEY_STATE_TOGGLE);
+            mBoxNumber = bundle.getInt(KEY_BOX_NUMBER);
             super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATE));
         }else {
             super.onRestoreInstanceState(state);
