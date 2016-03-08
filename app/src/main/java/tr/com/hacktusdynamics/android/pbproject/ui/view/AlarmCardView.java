@@ -130,19 +130,6 @@ public class AlarmCardView extends CardView {
             }
         });
 
-
-/*
-        toggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleButton.setTextColor(getStateToggle() ? Color.GREEN : Color.RED);
-                setStateToggle(!getStateToggle());
-                Log.d(TAG, "inside toggle btn clicked");
-                Log.d(TAG, "mBoxAlarmDateTime1: " + mBoxAlarmDateTime);
-            }
-        });
-*/
-
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,15 +165,15 @@ public class AlarmCardView extends CardView {
                         setDateString(dateString);
                         setTimeString(timeString);
                         alertDialog.dismiss();
+
+                        /** Do work from Activty onClickListener*/
+                        if (onTimeButtonClickListener != null) {
+                            onTimeButtonClickListener.onClick(view);
+                        }
                     }
                 });
                 alertDialog.setView(dialogView);
                 alertDialog.show();
-
-                /** Do work from Activty onClickListener*/
-                if (onTimeButtonClickListener != null) {
-                    onTimeButtonClickListener.onClick(view);
-                }
             }
         });
 

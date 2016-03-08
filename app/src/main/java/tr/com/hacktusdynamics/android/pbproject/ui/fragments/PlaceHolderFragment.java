@@ -1,5 +1,7 @@
 package tr.com.hacktusdynamics.android.pbproject.ui.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,12 +9,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.util.Date;
+
+import tr.com.hacktusdynamics.android.pbproject.Constants;
+import tr.com.hacktusdynamics.android.pbproject.MyApplication;
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.models.form.BoxForm;
+import tr.com.hacktusdynamics.android.pbproject.ui.activities.CreateAlarmActivity;
 import tr.com.hacktusdynamics.android.pbproject.ui.view.AlarmCardView;
+
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
 
 
 /**
@@ -65,6 +77,27 @@ public class PlaceHolderFragment extends Fragment {
                 .buildRoundRect(Integer.toString(mSectionNumber * 3), Color.GREEN, 40);
         mAlarmCardView1.setImageDrawable(boxNumberDrawable);
         mAlarmCardView1.setBoxNumber(mSectionNumber * 3);
+        mAlarmCardView1.setOnTimeButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "HiButtonFromFragment", Toast.LENGTH_SHORT).show();
+                //TODO: save the alarm to the mAlarms in Activity
+                BoxForm bf;
+                int boxNumber = mSectionNumber * 3;
+                Date alarmDateTime = new Date(mAlarmCardView1.getBoxAlarmDateTime());
+                SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+                String userProfileId = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
+                bf = new BoxForm(boxNumber, alarmDateTime, userProfileId);
+                ((CreateAlarmActivity)getActivity()).getAlarms().add(bf);
+                ((CreateAlarmActivity)getActivity()).showAlarms();
+            }
+        });
+        mAlarmCardView1.setOnToggleButtonClickListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Toast.makeText(getActivity(), "HiToggleButtonFromFragment", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mAlarmCardView2 = (AlarmCardView) rootView.findViewById(R.id.alarm_card2);
         boxNumberDrawable = TextDrawable.builder()

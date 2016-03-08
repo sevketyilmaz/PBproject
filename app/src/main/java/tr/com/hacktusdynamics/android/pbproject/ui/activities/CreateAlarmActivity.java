@@ -7,6 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,39 +20,83 @@ import android.view.View;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.models.form.BoxForm;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
+import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
 
 public class CreateAlarmActivity extends AppCompatActivity {
     private static final String TAG = CreateAlarmActivity.class.getSimpleName();
 
-    private Long[] mAlarms;
+    private List<BoxForm> mAlarms;
 
-    public Long[] getAlarms() {
+    public void setAlarms(List<BoxForm> alarms) {
+        mAlarms = alarms;
+    }
+
+    public List<BoxForm> getAlarms() {
         return mAlarms;
     }
 
-    public String showAlarms(){
-        StringBuilder sb = new StringBuilder();
-        for(Long l : mAlarms){
-            sb.append(l.toString() + " - ");
+    public String showAlarms() {
+        if(mAlarms.size() != 0) {
+            Collections.sort(mAlarms, new AlarmTimeComparator());
+            StringBuilder sb = new StringBuilder();
+            for (BoxForm bf : mAlarms) {
+                sb.append("( " + bf.getBoxNumber() + " - " + bf.getAlarmTime() + " )");
+            }
+            return sb.toString();
+        }else{
+            return null;
         }
-        return sb.toString();
     }
-    public void addAlarm(int boxNumber, long dateTime){
-        mAlarms[boxNumber-1] = dateTime;
+
+    public void addAlarm(int boxNumber, long dateTime) {
+        BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), "123");
+        mAlarms.add(bf);
     }
-    public long getAlarm(int boxNumber){
-        return mAlarms[boxNumber-1];
+    public void removeAlarm(int boxNumber){
+        for(BoxForm bf : mAlarms){
+            if(bf.getBoxNumber() == boxNumber)
+                mAlarms.remove(bf);
+        }
+    }
+    public void disableAlarm(int boxNumber){
+        for(BoxForm bf : mAlarms){
+            if(bf.getBoxNumber() == boxNumber)
+                bf.setIsActive(false);
+        }
+    }
+
+    public long getAlarmDateTime(int boxNumber) {
+        long dt = 0L;
+        for(BoxForm boxForm : mAlarms){
+            if(boxForm.getBoxNumber() == boxNumber -1)
+                dt = boxForm.getAlarmTime().getTime();
+        }
+        return dt;
+    }
+    public BoxForm getAlarm(int boxNumber){
+        BoxForm bf = null;
+        for(BoxForm boxForm : mAlarms){
+            if(boxForm.getBoxNumber() == boxNumber -1)
+                bf = boxForm;
+        }
+        return bf;
     }
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -92,14 +138,11 @@ public class CreateAlarmActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Log.d(TAG, showAlarms());
             }
         });
 
-        mAlarms = new Long[21];
-        for(int i = 0; i<21; i++)
-            mAlarms[i]=new Long(0L);
-
-        Log.d(TAG, showAlarms());
+        mAlarms = new ArrayList<>();
 
     }
 
@@ -108,12 +151,12 @@ public class CreateAlarmActivity extends AppCompatActivity {
      */
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_1));
-        tabLayout.getTabAt(1).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_2));
-        tabLayout.getTabAt(2).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_3));
-        tabLayout.getTabAt(3).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_4));
-        tabLayout.getTabAt(4).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_5));
-        tabLayout.getTabAt(5).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_6));
-        tabLayout.getTabAt(6).setIcon(new IconicsDrawable(this,GoogleMaterial.Icon.gmd_filter_7));
+        tabLayout.getTabAt(1).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_2));
+        tabLayout.getTabAt(2).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_3));
+        tabLayout.getTabAt(3).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_4));
+        tabLayout.getTabAt(4).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_5));
+        tabLayout.getTabAt(5).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_6));
+        tabLayout.getTabAt(6).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_7));
     }
 
     @Override
@@ -136,6 +179,16 @@ public class CreateAlarmActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     /**
