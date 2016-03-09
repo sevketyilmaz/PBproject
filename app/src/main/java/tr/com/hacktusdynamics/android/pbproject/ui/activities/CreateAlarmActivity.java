@@ -53,12 +53,20 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
 
     public void addOrUpdateAlarm(int boxNumber, long dateTime, String userProfileId) {
+        boolean inList = false;
+        BoxForm inListBoxForm = null;
         for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == (boxNumber-1))
-                boxForm.setAlarmTime(new Date(dateTime));
+            if(boxForm.getBoxNumber() == (boxNumber-1)) {
+                inList = true;
+                inListBoxForm = boxForm;
+            }
         }
-        BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), userProfileId);
-        mAlarms.add(bf);
+        if(inList) {
+            inListBoxForm.setAlarmTime(new Date(dateTime));
+        }else {
+            BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), userProfileId);
+            mAlarms.add(bf);
+        }
     }
     public void removeAlarm(int boxNumber){
         for(BoxForm bf : mAlarms){
