@@ -35,10 +35,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
     private List<BoxForm> mAlarms;
 
-    public void setAlarms(List<BoxForm> alarms) {
-        mAlarms = alarms;
-    }
-
     public List<BoxForm> getAlarms() {
         return mAlarms;
     }
@@ -48,16 +44,20 @@ public class CreateAlarmActivity extends AppCompatActivity {
             Collections.sort(mAlarms, new AlarmTimeComparator());
             StringBuilder sb = new StringBuilder();
             for (BoxForm bf : mAlarms) {
-                sb.append("( " + bf.getBoxNumber() + " - " + bf.getAlarmTime() + " )");
+                sb.append("( " + bf.getBoxNumber() + " - " + bf.getAlarmTime() + " - " + bf.getUserProfileId() + " )");
             }
             return sb.toString();
         }else{
-            return null;
+            return "";
         }
     }
 
-    public void addAlarm(int boxNumber, long dateTime) {
-        BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), "123");
+    public void addOrUpdateAlarm(int boxNumber, long dateTime, String userProfileId) {
+        for(BoxForm boxForm : mAlarms){
+            if(boxForm.getBoxNumber() == (boxNumber-1))
+                boxForm.setAlarmTime(new Date(dateTime));
+        }
+        BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), userProfileId);
         mAlarms.add(bf);
     }
     public void removeAlarm(int boxNumber){
@@ -72,6 +72,12 @@ public class CreateAlarmActivity extends AppCompatActivity {
                 bf.setIsActive(false);
         }
     }
+    public void enableAlarm(int boxNumber){
+        for(BoxForm bf : mAlarms){
+            if(bf.getBoxNumber() == boxNumber)
+                bf.setIsActive(true);
+        }
+    }
 
     public long getAlarmDateTime(int boxNumber) {
         long dt = 0L;
@@ -84,7 +90,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
     public BoxForm getAlarm(int boxNumber){
         BoxForm bf = null;
         for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == boxNumber -1)
+            if(boxForm.getBoxNumber() == (boxNumber -1))
                 bf = boxForm;
         }
         return bf;
@@ -136,8 +142,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Log.d(TAG, showAlarms());
             }
         });

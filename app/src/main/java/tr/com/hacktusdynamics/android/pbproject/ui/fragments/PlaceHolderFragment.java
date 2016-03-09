@@ -15,12 +15,9 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
-import java.util.Date;
-
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.MyApplication;
 import tr.com.hacktusdynamics.android.pbproject.R;
-import tr.com.hacktusdynamics.android.pbproject.models.form.BoxForm;
 import tr.com.hacktusdynamics.android.pbproject.ui.activities.CreateAlarmActivity;
 import tr.com.hacktusdynamics.android.pbproject.ui.view.AlarmCardView;
 
@@ -82,14 +79,11 @@ public class PlaceHolderFragment extends Fragment {
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "HiButtonFromFragment", Toast.LENGTH_SHORT).show();
                 //TODO: save the alarm to the mAlarms in Activity
-                BoxForm bf;
                 int boxNumber = mSectionNumber * 3;
-                Date alarmDateTime = new Date(mAlarmCardView1.getBoxAlarmDateTime());
+                long alarmDateTime =mAlarmCardView1.getBoxAlarmDateTime();
                 SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
                 String userProfileId = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
-                bf = new BoxForm(boxNumber, alarmDateTime, userProfileId);
-                ((CreateAlarmActivity)getActivity()).getAlarms().add(bf);
-                ((CreateAlarmActivity)getActivity()).showAlarms();
+                ((CreateAlarmActivity)getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
             }
         });
         mAlarmCardView1.setOnToggleButtonClickListener(new CompoundButton.OnCheckedChangeListener() {
