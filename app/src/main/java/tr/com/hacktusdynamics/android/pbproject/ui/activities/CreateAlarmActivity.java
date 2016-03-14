@@ -70,19 +70,19 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
     public void removeAlarm(int boxNumber){
         for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == boxNumber)
+            if(bf.getBoxNumber() == (boxNumber-1))
                 mAlarms.remove(bf);
         }
     }
     public void disableAlarm(int boxNumber){
         for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == boxNumber)
+            if(bf.getBoxNumber() == (boxNumber-1))
                 bf.setIsActive(false);
         }
     }
     public void enableAlarm(int boxNumber){
         for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == boxNumber)
+            if(bf.getBoxNumber() == (boxNumber-1))
                 bf.setIsActive(true);
         }
     }
@@ -90,7 +90,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
     public long getAlarmDateTime(int boxNumber) {
         long dt = 0L;
         for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == boxNumber -1)
+            if(boxForm.getBoxNumber() == (boxNumber -1))
                 dt = boxForm.getAlarmTime().getTime();
         }
         return dt;
