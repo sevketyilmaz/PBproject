@@ -15,7 +15,7 @@
                   android:layout_marginLeft="20dp"
                   android:textSize="18sp"
                   android:textColor="@color/alarm_cardview_title_color"
-                  android:text="Create date and time for PillBox"/>
+                  android:text="@string/create_datetime_for_pillbox"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <ToggleButton android:id="@+id/toggle_btn"
+            <Button android:id="@+id/dlt_btn"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textSize="14sp"
@@ -91,10 +91,9 @@
                           android:paddingLeft="16dp"
                           android:paddingRight="16dp"
                           android:textStyle="bold"
-                          android:textOff="@string/toggle_off"
-                          android:textOn="@string/toggle_on"
                           android:textColor="@android:color/holo_red_dark"
-                          android:layout_weight="0.5"/>
+                          android:layout_weight="0.5"
+                          android:text="@string/delete"/>
 
             <View
                 android:layout_width="1dp"
@@ -112,7 +111,7 @@
                     android:paddingRight="16dp"
                     android:textStyle="bold"
                     android:layout_weight="0.5"
-                    android:text="Time"/>
+                    android:text="@string/time"/>
         </LinearLayout>
     </LinearLayout>
 </merge>

@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,19 +76,23 @@ public class PlaceHolderFragment extends Fragment {
         mAlarmCardView1.setOnTimeButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "HiButtonFromFragment", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "HiTimeButtonFromFragment", Toast.LENGTH_SHORT).show();
                 //TODO: save the alarm to the mAlarms in Activity
                 int boxNumber = mSectionNumber * 3;
-                long alarmDateTime =mAlarmCardView1.getBoxAlarmDateTime();
+                long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
                 SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
                 String userProfileId = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
-                ((CreateAlarmActivity)getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
+                ((CreateAlarmActivity) getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
             }
         });
-        mAlarmCardView1.setOnToggleButtonClickListener(new CompoundButton.OnCheckedChangeListener() {
+        mAlarmCardView1.setOnDeleteButtonClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Toast.makeText(getActivity(), "HiToggleButtonFromFragment", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                //TODO: delete the alarm from mAlarms in Activity
+                int boxNumber = mSectionNumber * 3;
+                long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
+                ((CreateAlarmActivity)getActivity()).removeAlarm(boxNumber);
+                Toast.makeText(getActivity(), "HiDeleteButtonFromFragment_ boxNumber: " + boxNumber , Toast.LENGTH_SHORT).show();
             }
         });
 

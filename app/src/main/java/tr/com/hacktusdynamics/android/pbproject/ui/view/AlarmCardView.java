@@ -2,7 +2,6 @@ package tr.com.hacktusdynamics.android.pbproject.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -14,12 +13,10 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,19 +34,17 @@ public class AlarmCardView extends CardView {
     //private static final String KEY_STATE_TOGGLE = "stateToggle";
     private static final String KEY_BOX_NUMBER = "boxNumber";
 
-    private Button timeButton;
-    private ToggleButton toggleButton;
+    private Button deleteButton,timeButton;
     private TextView dateTextView, timeTextView;
     private ImageView boxNumberImageView;
 
     private String mDateString, mTimeString;
-    //private boolean mStateToggle; //keeps toggle button state
     private long mBoxAlarmDateTime = 0L; //keeps date and time
     private int mBoxNumber; //keeps the box number
     private Drawable mImageDrawable;
 
-    private CompoundButton.OnCheckedChangeListener onToggleButtonClickListener;
     private View.OnClickListener onTimeButtonClickListener;
+    private View.OnClickListener onDeleteButtonClickListener;
 
     public AlarmCardView(Context context) {
         /*
@@ -82,18 +77,19 @@ public class AlarmCardView extends CardView {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         layoutInflater.inflate(R.layout.alarm_card_view, this);
 
-        toggleButton = (ToggleButton) findViewById(R.id.toggle_btn);
+        deleteButton = (Button) findViewById(R.id.dlt_btn);
         timeButton = (Button) findViewById(R.id.time_btn);
         dateTextView = (TextView) findViewById(R.id.date_tv);
         timeTextView = (TextView) findViewById(R.id.time_tv);
         boxNumberImageView = (ImageView) findViewById(R.id.box_number_iv);
 
+/*
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //toggleButton.setTextColor(isChecked ? Color.GREEN : Color.RED);
                 //setStateToggle(isChecked);
-                if(isChecked){ /** from False to True */
+                if(isChecked){ *//** from False to True *//*
                     if(mBoxAlarmDateTime != 0){ // if ever date and time setted (mBoxAlarmDateTime != 0) then allow it, and return the setted date and time text back and SAVE IT
                         toggleButton.setTextColor(Color.GREEN);
 
@@ -110,7 +106,7 @@ public class AlarmCardView extends CardView {
                     }else{ // mBoxAlarmDateTime == 0 then toggleButton remains false
                         toggleButton.setChecked(false);
                     }
-                }else { /** from True to False */
+                }else { *//** from True to False *//*
                     // Clear the date and time text but let mBoxAlarmDateTime as it is and DELETE IT
                     toggleButton.setTextColor(Color.RED);
 
@@ -126,6 +122,23 @@ public class AlarmCardView extends CardView {
                 // Do work from Activty onClickListener
                 if (onToggleButtonClickListener != null) {
                     onToggleButtonClickListener.onCheckedChanged(buttonView, isChecked);
+                }
+            }
+        });
+*/
+
+        deleteButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "delete btn clicked : " + mBoxAlarmDateTime);
+                //clear date and time
+                setDateString(getContext().getResources().getString(R.string.date_tv_text));
+                setTimeString(getContext().getResources().getString(R.string.time_tv_text));
+                //setBoxAlarmDateTime(0L);
+
+                /** Do work from Activty onClickListener*/
+                if (onDeleteButtonClickListener != null) {
+                    onDeleteButtonClickListener.onClick(view);
                 }
             }
         });
@@ -161,7 +174,6 @@ public class AlarmCardView extends CardView {
                         String dateString = sdf.format(new Date(year - 1900, month, day));
 
                         setBoxAlarmDateTime(calendar.getTime().getTime());//after choosing date and time save datetime on member variable
-                        toggleButton.setChecked(true);//setStateToggle(true);
                         setDateString(dateString);
                         setTimeString(timeString);
                         alertDialog.dismiss();
@@ -212,13 +224,6 @@ public class AlarmCardView extends CardView {
 */
 
     //getters setters
-    public CompoundButton.OnCheckedChangeListener getOnToggleButtonClickListener() {
-        return onToggleButtonClickListener;
-    }
-    public void setOnToggleButtonClickListener(CompoundButton.OnCheckedChangeListener onToggleButtonClickListener) {
-        this.onToggleButtonClickListener = onToggleButtonClickListener;
-    }
-
     public View.OnClickListener getOnTimeButtonClickListener() {
         return onTimeButtonClickListener;
     }
@@ -226,15 +231,12 @@ public class AlarmCardView extends CardView {
         this.onTimeButtonClickListener = onTimeButtonClickListener;
     }
 
-/*
-    public boolean getStateToggle() {
-        return mStateToggle;
+    public View.OnClickListener getOnDeleteButtonClickListener() {
+        return onDeleteButtonClickListener;
     }
-    public void setStateToggle(boolean state) {
-        mStateToggle = state;
-        refresh();
+    public void setOnDeleteButtonClickListener(View.OnClickListener onDeleteButtonClickListener) {
+        this.onDeleteButtonClickListener = onDeleteButtonClickListener;
     }
-*/
 
     public long getBoxAlarmDateTime() {
         return mBoxAlarmDateTime;
@@ -284,7 +286,6 @@ public class AlarmCardView extends CardView {
         bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState());
         bundle.putString(KEY_DATE_TEXT, mDateString);
         bundle.putString(KEY_TIME_TEXT, mTimeString);
-//        bundle.putBoolean(KEY_STATE_TOGGLE, mStateToggle);
         bundle.putInt(KEY_BOX_NUMBER, mBoxNumber);
         return bundle;
     }
@@ -295,7 +296,6 @@ public class AlarmCardView extends CardView {
             Bundle bundle = (Bundle) state;
             mDateString = bundle.getString(KEY_DATE_TEXT);
             mTimeString = bundle.getString(KEY_TIME_TEXT);
-//            mStateToggle = bundle.getBoolean(KEY_STATE_TOGGLE);
             mBoxNumber = bundle.getInt(KEY_BOX_NUMBER);
             super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATE));
         }else {

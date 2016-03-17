@@ -69,11 +69,16 @@ public class CreateAlarmActivity extends AppCompatActivity {
         }
     }
     public void removeAlarm(int boxNumber){
-        for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == (boxNumber-1))
+        BoxForm bf;
+        for(int i = 0; i< mAlarms.size(); i++){
+            bf = mAlarms.get(i);
+            if(bf.getBoxNumber() == (boxNumber-1)) {
                 mAlarms.remove(bf);
+            }
         }
     }
+
+ /*
     public void disableAlarm(int boxNumber){
         for(BoxForm bf : mAlarms){
             if(bf.getBoxNumber() == (boxNumber-1))
@@ -103,7 +108,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         }
         return bf;
     }
-
+*/
     /**
      * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -198,7 +203,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
     }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -208,7 +212,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

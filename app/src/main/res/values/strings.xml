@@ -41,10 +41,12 @@
     <string name="box_number">Box Number :</string>
     <string name="alarm_date_and_time">Alarm Date and Time :</string>
     <string name="box_state">Box State :</string>
-    <string name="toggle_off">off</string>
-    <string name="toggle_on">on</string>
     <string name="date_tv_text">date text</string>
     <string name="time_tv_text">time text</string>
+    <string name="delete">Delete</string>
+    <string name="time">Time</string>
+    <string name="create_datetime_for_pillbox">Create date and time for PillBox</string>
+
     <plurals name="subtitle_plural">
         <item quantity="one">%1$s box</item>
         <item quantity="other">%1$s boxes</item>
