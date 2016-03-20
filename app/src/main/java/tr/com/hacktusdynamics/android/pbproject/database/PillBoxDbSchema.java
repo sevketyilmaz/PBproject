@@ -26,4 +26,14 @@ public class PillBoxDbSchema {
             public static final String USER_PROFILE_ID= "userprofileid";
         }
     }
+
+    public static final class AlarmTable{
+        public static final String NAME = "alarms";
+
+        public static final class Cols{
+            public static final String CREATED_DATE = "createddate";
+            public static final String USER_PROFILE_ID = "userprofileid";
+        }
+    }
+
 }

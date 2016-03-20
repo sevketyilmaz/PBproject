@@ -36,6 +36,13 @@ public class PillBoxBaseHelper extends SQLiteOpenHelper {
                         BoxTable.Cols.BOX_STATE + ", " +
                         BoxTable.Cols.USER_PROFILE_ID + ")"
         );
+
+        //Create alams table
+        db.execSQL("create table " + AlarmTable.NAME + "(" +
+                        " _id integer primary key autoincrement, " +
+                        AlarmTable.Cols.CREATED_DATE + ", " +
+                        AlarmTable.Cols.USER_PROFILE_ID + ")"
+        );
     }
 
     @Override
