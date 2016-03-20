@@ -15,8 +15,10 @@ import java.util.List;
 import java.util.UUID;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.database.AlarmCursorWrapper;
 import tr.com.hacktusdynamics.android.pbproject.database.BoxCursorWrapper;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxBaseHelper;
+import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.AlarmTable;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.BoxTable;
 import tr.com.hacktusdynamics.android.pbproject.database.PillBoxDbSchema.UserProfileTable;
 import tr.com.hacktusdynamics.android.pbproject.database.UserProfileCursorWrapper;
@@ -55,7 +57,7 @@ public class MyLab {
     }
 
     //setters getters
-    /**Box portion of getters setters*/
+    /**Box portion of CRUD*/
     public List<Box> getBoxes(){
         List<Box> boxes = new ArrayList<>();
         BoxCursorWrapper cursorWrapper = queryBox(null, null);
@@ -71,7 +73,6 @@ public class MyLab {
         }
         return boxes;
     }
-
     public Box getBox(UUID id){
         BoxCursorWrapper cursorWrapper = queryBox(
                 BoxTable.Cols.UUID + " = ?",
@@ -104,7 +105,8 @@ public class MyLab {
                 new String[]{boxUUID});
     }
 
-    /** UserProfile portion of getters setters*/
+
+    /** UserProfile portion of CRUD*/
     public List<IProfile> getUserProfiles(){
         List<IProfile> profiles = new ArrayList<>();
         UserProfileCursorWrapper cursorWrapper = queryUserProfiles(null, null);
@@ -122,7 +124,6 @@ public class MyLab {
         }
         return profiles;
     }
-
     public UserProfile getUserProfile(UUID id){
         UserProfileCursorWrapper cursorWrapper = queryUserProfiles(
                 UserProfileTable.Cols.UUID + " = ?",
@@ -144,7 +145,6 @@ public class MyLab {
         ContentValues contentValues = getUserProfileContentValues(userProfile);
         mDatabase.insert(UserProfileTable.NAME, null, contentValues);
     }
-
     public void updateUserProfile(UserProfile userProfile){
         String uuidString = userProfile.getId().toString();
         ContentValues contentValues = getUserProfileContentValues(userProfile);
@@ -152,13 +152,65 @@ public class MyLab {
                 UserProfileTable.Cols.UUID + " = ?",
                 new String[]{uuidString});
     }
-
     public void deleteUserProfile(String uuidString){
         mDatabase.delete(UserProfileTable.NAME,
                 UserProfileTable.Cols.UUID + " = ?",
                 new String[]{uuidString});
     }
 
+
+    /**Alarm portion of CRUD*/
+    public List<Alarm> getAlarms(){
+        List<Alarm> alarms = new ArrayList<>();
+        AlarmCursorWrapper cursorWrapper = queryAlarm(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()){
+                Alarm alarm = cursorWrapper.getAlarm();
+                alarms.add(alarm);
+                cursorWrapper.moveToNext();
+            }
+        }finally {
+            cursorWrapper.close();
+        }
+        return alarms;
+    }
+    public Alarm getAlarm(int id){
+        AlarmCursorWrapper cursorWrapper = queryAlarm(
+                AlarmTable.Cols.KEY_ID + " = ?",
+                new String[]{String.valueOf(id)}
+        );
+        try {
+            if (cursorWrapper.getCount() == 0)
+                return null;
+            cursorWrapper.moveToFirst();
+            Alarm alarm = cursorWrapper.getAlarm();
+            return alarm;
+        }finally {
+            cursorWrapper.close();
+        }
+    }
+    public void addAlarm(Alarm alarm){
+        ContentValues contentValues = getAlarmContentValues(alarm);
+        mDatabase.insert(AlarmTable.NAME, null, contentValues);
+    }
+    public void updateAlarm(Alarm alarm){
+        //String uuidString = box.getId().toString();
+        int id = alarm.getId();
+        ContentValues contentValues = getAlarmContentValues(alarm);
+        mDatabase.update(AlarmTable.NAME, contentValues,
+                AlarmTable.Cols.KEY_ID + " = ?",
+                new String[]{String.valueOf(id)});
+    }
+    public void deleteAlarm(int id){
+        mDatabase.delete(AlarmTable.NAME,
+                AlarmTable.Cols.KEY_ID + " = ?",
+                new String[]{String.valueOf(id)});
+    }
+
+
+    /*******************************************************************************/
+/***/
     private static ContentValues getUserProfileContentValues(UserProfile userProfile){
         ContentValues values = new ContentValues();
         values.put(UserProfileTable.Cols.UUID, userProfile.getId().toString());
@@ -168,7 +220,6 @@ public class MyLab {
         values.put(UserProfileTable.Cols.DEPENDENT_PHONE, userProfile.getDependentPhone());
         return values;
     }
-
     private UserProfileCursorWrapper queryUserProfiles(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 UserProfileTable.NAME,
@@ -181,7 +232,9 @@ public class MyLab {
         );
         return new UserProfileCursorWrapper(cursor);
     }
+/***/
 
+/***/
     private static ContentValues getBoxContentValues(Box box){
         ContentValues values = new ContentValues();
         values.put(BoxTable.Cols.UUID, box.getId().toString());
@@ -192,7 +245,6 @@ public class MyLab {
         values.put(BoxTable.Cols.USER_PROFILE_ID, box.getUserProfileId());
         return values;
     }
-
     private BoxCursorWrapper queryBox(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
                 BoxTable.NAME,
@@ -205,6 +257,28 @@ public class MyLab {
         );
         return new BoxCursorWrapper(cursor);
     }
+/***/
+
+/***/
+    private static ContentValues getAlarmContentValues(Alarm alarm){
+        ContentValues values = new ContentValues();
+        values.put(AlarmTable.Cols.CREATED_DATE, alarm.getCreatedTime().getTime());
+        values.put(AlarmTable.Cols.USER_PROFILE_ID, alarm.getUserProfileId());
+        return values;
+    }
+    private AlarmCursorWrapper queryAlarm(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(
+                AlarmTable.NAME,
+                null, //null select all columns
+                whereClause,
+                whereArgs,
+                null, //group by
+                null, //having
+                null //order by
+        );
+        return new AlarmCursorWrapper(cursor);
+    }
+/***/
 
     private void create10DummyBoxes(){
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

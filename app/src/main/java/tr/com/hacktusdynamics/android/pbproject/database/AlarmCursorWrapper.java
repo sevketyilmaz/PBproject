@@ -13,10 +13,11 @@ public class AlarmCursorWrapper extends CursorWrapper{
     }
 
     public Alarm getAlarm(){
+        int id = getInt(getColumnIndex(PillBoxDbSchema.AlarmTable.Cols.KEY_ID));
         long createdDate = getLong(getColumnIndex(PillBoxDbSchema.AlarmTable.Cols.CREATED_DATE));
         String userProfileId = getString(getColumnIndex(PillBoxDbSchema.AlarmTable.Cols.USER_PROFILE_ID));
 
-        Alarm alarm = new Alarm(new Date(createdDate), userProfileId);
+        Alarm alarm = new Alarm(id, new Date(createdDate), userProfileId);
 
         return alarm;
     }

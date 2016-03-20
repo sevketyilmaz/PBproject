@@ -37,7 +37,7 @@ public class PillBoxBaseHelper extends SQLiteOpenHelper {
                         BoxTable.Cols.USER_PROFILE_ID + ")"
         );
 
-        //Create alams table
+        //Create alarms table
         db.execSQL("create table " + AlarmTable.NAME + "(" +
                         " _id integer primary key autoincrement, " +
                         AlarmTable.Cols.CREATED_DATE + ", " +

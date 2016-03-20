@@ -3,12 +3,10 @@ package tr.com.hacktusdynamics.android.pbproject.models;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by Asus on 20.3.2016.
- */
 public class Alarm implements Serializable {
     private static final String TAG = Alarm.class.getSimpleName();
 
+    private int id;
     private Date createdTime; // Alarm set Created time
     private String userProfileId; //user that created this alarm set
 
@@ -17,8 +15,20 @@ public class Alarm implements Serializable {
         setCreatedTime(createdTime);
         setUserProfileId(userProfileId);
     }
+    public Alarm(int id, Date createdTime, String userProfileId){
+        setId(id);
+        setCreatedTime(createdTime);
+        setUserProfileId(userProfileId);
+    }
 
     //getters setters
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
