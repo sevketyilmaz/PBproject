@@ -2,18 +2,18 @@ package tr.com.hacktusdynamics.android.pbproject.utils;
 
 import java.util.Comparator;
 
-import tr.com.hacktusdynamics.android.pbproject.models.form.BoxForm;
+import tr.com.hacktusdynamics.android.pbproject.models.Box;
 
 /**
- * AlarmTimeComparator used for sorting BoxForm objects with alarmTime
+ * AlarmTimeComparator used for sorting Box objects with alarmTime
  */
-public class AlarmTimeComparator implements Comparator<BoxForm> {
+public class AlarmTimeComparator implements Comparator<Box> {
 
     @Override
-    public int compare(BoxForm boxForm1, BoxForm boxForm2) {
-        if(boxForm1.getAlarmTime() == null || boxForm2.getAlarmTime() == null)
+    public int compare(Box box1, Box box2) {
+        if(box1.getAlarmTime() == null || box2.getAlarmTime() == null)
             return 0;
 
-        return boxForm1.getAlarmTime().compareTo(boxForm2.getAlarmTime());
+        return box1.getAlarmTime().compareTo(box2.getAlarmTime());
     }
 }

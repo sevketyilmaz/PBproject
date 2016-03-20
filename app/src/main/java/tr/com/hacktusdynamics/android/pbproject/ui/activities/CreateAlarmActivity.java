@@ -26,16 +26,16 @@ import java.util.Date;
 import java.util.List;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
-import tr.com.hacktusdynamics.android.pbproject.models.form.BoxForm;
+import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
 
 public class CreateAlarmActivity extends AppCompatActivity {
     private static final String TAG = CreateAlarmActivity.class.getSimpleName();
 
-    private List<BoxForm> mAlarms;
+    private List<Box> mAlarms;
 
-    public List<BoxForm> getAlarms() {
+    public List<Box> getAlarms() {
         return mAlarms;
     }
 
@@ -43,7 +43,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         if(mAlarms.size() != 0) {
             Collections.sort(mAlarms, new AlarmTimeComparator());
             StringBuilder sb = new StringBuilder();
-            for (BoxForm bf : mAlarms) {
+            for (Box bf : mAlarms) {
                 sb.append("( " + bf.getBoxNumber() + " - " + bf.getAlarmTime() + " - " + bf.getUserProfileId() + " )");
             }
             return sb.toString();
@@ -54,61 +54,30 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
     public void addOrUpdateAlarm(int boxNumber, long dateTime, String userProfileId) {
         boolean inList = false;
-        BoxForm inListBoxForm = null;
-        for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == (boxNumber-1)) {
+        Box inListBox = null;
+        for(Box box : mAlarms){
+            if(box.getBoxNumber() == (boxNumber-1)) {
                 inList = true;
-                inListBoxForm = boxForm;
+                inListBox = box;
             }
         }
         if(inList) {
-            inListBoxForm.setAlarmTime(new Date(dateTime));
+            inListBox.setAlarmTime(new Date(dateTime));
         }else {
-            BoxForm bf = new BoxForm((boxNumber - 1), new Date(dateTime), userProfileId);
-            mAlarms.add(bf);
+            Box b = new Box((boxNumber - 1), new Date(dateTime), userProfileId);
+            mAlarms.add(b);
         }
     }
     public void removeAlarm(int boxNumber){
-        BoxForm bf;
+        Box b;
         for(int i = 0; i< mAlarms.size(); i++){
-            bf = mAlarms.get(i);
-            if(bf.getBoxNumber() == (boxNumber-1)) {
-                mAlarms.remove(bf);
+            b = mAlarms.get(i);
+            if(b.getBoxNumber() == (boxNumber-1)) {
+                mAlarms.remove(b);
             }
         }
     }
 
- /*
-    public void disableAlarm(int boxNumber){
-        for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == (boxNumber-1))
-                bf.setIsActive(false);
-        }
-    }
-    public void enableAlarm(int boxNumber){
-        for(BoxForm bf : mAlarms){
-            if(bf.getBoxNumber() == (boxNumber-1))
-                bf.setIsActive(true);
-        }
-    }
-
-    public long getAlarmDateTime(int boxNumber) {
-        long dt = 0L;
-        for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == (boxNumber -1))
-                dt = boxForm.getAlarmTime().getTime();
-        }
-        return dt;
-    }
-    public BoxForm getAlarm(int boxNumber){
-        BoxForm bf = null;
-        for(BoxForm boxForm : mAlarms){
-            if(boxForm.getBoxNumber() == (boxNumber -1))
-                bf = boxForm;
-        }
-        return bf;
-    }
-*/
     /**
      * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
