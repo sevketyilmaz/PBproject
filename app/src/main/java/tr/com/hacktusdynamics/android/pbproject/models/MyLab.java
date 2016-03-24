@@ -243,6 +243,7 @@ public class MyLab {
         values.put(BoxTable.Cols.CREATED_DATE, box.getCreatedTime().getTime());
         values.put(BoxTable.Cols.BOX_STATE, box.getBoxStateInt());
         values.put(BoxTable.Cols.USER_PROFILE_ID, box.getUserProfileId());
+        values.put(BoxTable.Cols.FOREIGN_KEY_ID, box.getForeignKeyId());
         return values;
     }
     private BoxCursorWrapper queryBox(String whereClause, String[] whereArgs){
@@ -289,7 +290,7 @@ public class MyLab {
         Date createdDate = new Date(System.currentTimeMillis());
         for(int i = 0; i < 10; i++){
             d = new Date((System.currentTimeMillis() + (i * 1000 * 60 * 60)));
-            box = new Box(null, i, d, createdDate, -1, userProfile);
+            box = new Box(null, i, d, createdDate, -1, userProfile, -1);
             box.setBoxState(Box.BoxStates.FULL_CLOSE);
             addBox(box);
         }

@@ -15,6 +15,7 @@ public class Box implements Serializable, Comparable<Box> {
     private Date createdTime;
     private BoxStates boxState;
     private String userProfileId; // user that created this box
+    private int foreignKeyId; //Alarm class id
 
     public static enum BoxStates{
         EMPTY_CLOSE("EMPTY_CLOSE"),
@@ -34,7 +35,10 @@ public class Box implements Serializable, Comparable<Box> {
 
     //Constructors
     public Box(int boxNumber, Date alarmDateTime, String userProfileId){
-        this(null, boxNumber, alarmDateTime, null, -1, userProfileId);
+        this(null, boxNumber, alarmDateTime, null, -1, userProfileId, -1);
+    }
+    public Box(int boxNumber, Date alarmDateTime, String userProfileId, int foreignKeyId){
+        this(null, boxNumber, alarmDateTime, null, -1, userProfileId, foreignKeyId);
     }
 
     /**
@@ -44,17 +48,20 @@ public class Box implements Serializable, Comparable<Box> {
      * @param createdTime null for current time
      * @param boxS integer box state, if less then zero set EMPTY_CLOSE
      * @param userProfileId which user created the box
+     * @param foreignKeyId Alarm class primary key
      *
      * @return Returns the box object
      */
-    public Box(String uuid, int boxNumber, Date alarmDateTime, Date createdTime, int boxS, String userProfileId){
+    public Box(String uuid, int boxNumber, Date alarmDateTime, Date createdTime, int boxS, String userProfileId, int foreignKeyId){
         setId(uuid); //null for random UUID
         setBoxNumber(boxNumber);
         setAlarmTime(alarmDateTime); //null for current datetime
         setCreatedTime(createdTime); //null for current datetime
         setBoxState(getBoxStateFromInt(boxS)); //any value other than 0,1,2,3 is EMPTY_CLOSE
         setUserProfileId(userProfileId);
+        setForeignKeyId(foreignKeyId); // -1 default
     }
+
 
     //setters getters
     public UUID getId(){
@@ -104,6 +111,11 @@ public class Box implements Serializable, Comparable<Box> {
         this.userProfileId = userProfileId;
     }
 
+    public int getForeignKeyId() { return foreignKeyId; }
+    public void setForeignKeyId(int foreignKeyId) {
+        this.foreignKeyId = foreignKeyId;
+    }
+
     public BoxStates getBoxState() {
         return boxState;
     }
@@ -149,6 +161,7 @@ public class Box implements Serializable, Comparable<Box> {
         }
         return state;
     }
+
 
     @Override
     public int compareTo(Box otherBox) {

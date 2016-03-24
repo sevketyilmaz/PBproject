@@ -24,6 +24,7 @@ public class PillBoxDbSchema {
             public static final String CREATED_DATE= "createddate";
             public static final String BOX_STATE= "boxstate";
             public static final String USER_PROFILE_ID= "userprofileid";
+            public static final String FOREIGN_KEY_ID= "foreignkeyid";
         }
     }
 

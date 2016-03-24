@@ -34,7 +34,8 @@ public class PillBoxBaseHelper extends SQLiteOpenHelper {
                         BoxTable.Cols.ALARM_DATE + ", " +
                         BoxTable.Cols.CREATED_DATE + ", " +
                         BoxTable.Cols.BOX_STATE + ", " +
-                        BoxTable.Cols.USER_PROFILE_ID + ")"
+                        BoxTable.Cols.USER_PROFILE_ID +
+                        BoxTable.Cols.FOREIGN_KEY_ID + ")"
         );
 
         //Create alarms table
