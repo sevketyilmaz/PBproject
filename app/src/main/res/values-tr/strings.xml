@@ -52,4 +52,7 @@
         <item quantity="other">%1$s kutu</item>
     </plurals>
 
+    <string name="title_activity_alarm_pager">Alarmlar Sayfası</string>
+    <string name="alarms">Alarmlar : </string>
+
 </resources>

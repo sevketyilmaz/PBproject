@@ -51,6 +51,8 @@
         <item quantity="one">%1$s box</item>
         <item quantity="other">%1$s boxes</item>
     </plurals>
-    <string name="title_activity_alarm_pager">AlarmPagerActivity</string>
+
+    <string name="title_activity_alarm_pager">Alarms Page</string>
+    <string name="alarms">Alarms : </string>
 
 </resources>

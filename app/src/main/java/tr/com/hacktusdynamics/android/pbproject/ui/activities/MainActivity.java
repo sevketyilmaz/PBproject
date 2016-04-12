@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.models.Alarm;
 import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 import tr.com.hacktusdynamics.android.pbproject.models.UserProfile;
@@ -50,8 +51,8 @@ import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicatio
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView mBoxRecyclerView;
-    private BoxAdapter mBoxAdapter;
+    private RecyclerView mAlarmRecyclerView;
+    private AlarmAdapter mAlarmAdapter;
     private TextView mEmptyElementTextView;
 
     //save our drawer or header
@@ -70,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         myLab = MyLab.get(sApplicationContext);
 
-        mBoxRecyclerView = (RecyclerView) findViewById(R.id.box_recycler_view);
-        mBoxRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAlarmRecyclerView = (RecyclerView) findViewById(R.id.alarm_recycler_view);
+        mAlarmRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mEmptyElementTextView = (TextView) findViewById(R.id.empty_element_text_view);
 
         //create the account header
@@ -261,48 +262,44 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class BoxHolder extends RecyclerView.ViewHolder {
-        private Box _box;
-        private TextView boxNumberView;
-        private TextView alarmDateTimeView;
-        private TextView boxStateView;
+    private class AlarmHolder extends RecyclerView.ViewHolder {
+        private Alarm mAlarm;
+        private TextView alarmsNumberView;
+        private TextView alarmsDateTimeView;
 
-        public BoxHolder(View itemView) {
+        public AlarmHolder(View itemView) {
             super(itemView);
 
-            boxNumberView = (TextView) itemView.findViewById(R.id.box_number);
-            alarmDateTimeView = (TextView) itemView.findViewById(R.id.alarm_datetime);
-            boxStateView = (TextView) itemView.findViewById(R.id.box_state);
+            alarmsNumberView = (TextView) itemView.findViewById(R.id.alarms_number);
+            alarmsDateTimeView = (TextView) itemView.findViewById(R.id.alarms_datetime);
         }
 
-        public void bindBox(Box box){
-            _box = box;
-            boxNumberView.setText(Integer.toString(_box.getBoxNumber()+1));
-            alarmDateTimeView.setText(_box.getAlarmTime().toString());
-            boxStateView.setText(_box.getBoxState().toString());
+        public void bindAlarm(Alarm alarm){
+            mAlarm = alarm;
+            alarmsNumberView.setText(Integer.toString(mAlarm.getId()));
+            alarmsDateTimeView.setText(mAlarm.getCreatedTime().toString());
         }
     }
 
-    private class BoxAdapter extends RecyclerView.Adapter<BoxHolder>{
-        private List<Box> _boxes;
+    private class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder>{
+        private List<Alarm> mAlarms;
 
         //Constructor
-        public BoxAdapter(List<Box> boxes){
-            setBoxes(boxes);
+        public AlarmAdapter(List<Alarm> alarms){
+            setAlarms(alarms);
         }
         //setters getters
-        public void setBoxes(List<Box> boxes){
-            _boxes = boxes;
+        public void setAlarms(List<Alarm> alarms){
+            mAlarms = alarms;
         }
-
         /**
          * Called by RecyclerView when its need a new View to display an item.
          * You create a View and wrap it in a ViewHolder.
          */
         @Override
-        public BoxHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = getLayoutInflater().inflate(R.layout.list_item_box, parent, false);
-            return new BoxHolder(itemView);
+        public AlarmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = getLayoutInflater().inflate(R.layout.list_item_alarm, parent, false);
+            return new AlarmHolder(itemView);
         }
 
         /**
@@ -310,14 +307,14 @@ public class MainActivity extends AppCompatActivity {
          * It receives ViewHolder and a position in your dataset.
          */
         @Override
-        public void onBindViewHolder(BoxHolder holder, int position) {
-            Box box = _boxes.get(position);
-            holder.bindBox(box);
+        public void onBindViewHolder(AlarmHolder alarmHolder, int position) {
+            Alarm alarm = mAlarms.get(position);
+            alarmHolder.bindAlarm(alarm);
         }
 
         @Override
         public int getItemCount() {
-            return _boxes.size();
+            return mAlarms.size();
         }
     }
 
@@ -325,12 +322,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "UpdateContentUI called");
         //TODO: choose only the latest alarm boxes
         List<Box> boxes = myLab.getBoxes();
-        if(mBoxAdapter == null){
-            mBoxAdapter = new BoxAdapter(boxes);
-            mBoxRecyclerView.setAdapter(mBoxAdapter);
+        if(mAlarmAdapter == null){
+            mAlarmAdapter = new AlarmAdapter(boxes);
+            mAlarmRecyclerView.setAdapter(mAlarmAdapter);
         }else {
-            mBoxAdapter.setBoxes(boxes);
-            mBoxAdapter.notifyDataSetChanged();
+            mAlarmAdapter.setBoxes(boxes);
+            mAlarmAdapter.notifyDataSetChanged();
         }
 
         //update toolbar subtitle
