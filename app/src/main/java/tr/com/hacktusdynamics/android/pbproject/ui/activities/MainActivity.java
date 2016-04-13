@@ -32,7 +32,6 @@ import java.util.List;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.Alarm;
-import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 import tr.com.hacktusdynamics.android.pbproject.models.UserProfile;
 
@@ -318,24 +317,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /** Create AlarmAdapter and set in on the recycler view*/
     private void UpdateContentUI() {
         Log.d(TAG, "UpdateContentUI called");
-        //TODO: choose only the latest alarm boxes
-        List<Box> boxes = myLab.getBoxes();
+        //TODO: choose only the alarms
+        List<Alarm> alarms = myLab.getAlarms();
         if(mAlarmAdapter == null){
-            mAlarmAdapter = new AlarmAdapter(boxes);
+            mAlarmAdapter = new AlarmAdapter(alarms);
             mAlarmRecyclerView.setAdapter(mAlarmAdapter);
         }else {
-            mAlarmAdapter.setBoxes(boxes);
+            mAlarmAdapter.setAlarms(alarms);
             mAlarmAdapter.notifyDataSetChanged();
         }
 
-        //update toolbar subtitle
-        int boxCount = myLab.getBoxes().size();
-        String subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, boxCount, boxCount);
-        getSupportActionBar().setSubtitle(subtitle);
-
-        mEmptyElementTextView.setVisibility(boxCount < 1 ? View.VISIBLE : View.GONE);
+        mEmptyElementTextView.setVisibility(alarms.size() < 1 ? View.VISIBLE : View.GONE);
     }
 
 }
