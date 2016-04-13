@@ -159,11 +159,18 @@ public class MyLab {
     }
 
 
-    /**Alarm portion of CRUD*/
-    public List<Alarm> getAlarms(){
+    /**Alarm portion of CRUD
+     * @param currentUserUUIDString
+     */
+    public List<Alarm> getAlarms(String currentUserUUIDString){
         List<Alarm> alarms = new ArrayList<>();
-        AlarmCursorWrapper cursorWrapper = queryAlarm(null, null);
+        AlarmCursorWrapper cursorWrapper = queryAlarm(
+                AlarmTable.Cols.USER_PROFILE_ID + " = ?",
+                new String[] {currentUserUUIDString}
+        );
         try {
+            if(cursorWrapper.getCount() == 0)
+                return null;
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()){
                 Alarm alarm = cursorWrapper.getAlarm();

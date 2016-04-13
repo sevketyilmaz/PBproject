@@ -261,13 +261,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private class AlarmHolder extends RecyclerView.ViewHolder {
+    private class AlarmHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Alarm mAlarm;
         private TextView alarmsNumberView;
         private TextView alarmsDateTimeView;
 
         public AlarmHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             alarmsNumberView = (TextView) itemView.findViewById(R.id.alarms_number);
             alarmsDateTimeView = (TextView) itemView.findViewById(R.id.alarms_datetime);
@@ -277,6 +278,12 @@ public class MainActivity extends AppCompatActivity {
             mAlarm = alarm;
             alarmsNumberView.setText(Integer.toString(mAlarm.getId()));
             alarmsDateTimeView.setText(mAlarm.getCreatedTime().toString());
+        }
+
+        @Override
+        public void onClick(View view) {
+            //TODO: open detail activity and show items
+            Toast.makeText(MainActivity.this, "Id: " + mAlarm.getId(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -320,8 +327,10 @@ public class MainActivity extends AppCompatActivity {
     /** Create AlarmAdapter and set in on the recycler view*/
     private void UpdateContentUI() {
         Log.d(TAG, "UpdateContentUI called");
-        //TODO: choose only the alarms
-        List<Alarm> alarms = myLab.getAlarms();
+        //TODO: choose only the alarms for current user
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
+        List<Alarm> alarms = myLab.getAlarms(currentUserUUIDString);
         if(mAlarmAdapter == null){
             mAlarmAdapter = new AlarmAdapter(alarms);
             mAlarmRecyclerView.setAdapter(mAlarmAdapter);
