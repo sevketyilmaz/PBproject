@@ -27,13 +27,17 @@ import java.util.List;
 
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.Box;
+import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
+
+import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 public class CreateAlarmActivity extends AppCompatActivity {
     private static final String TAG = CreateAlarmActivity.class.getSimpleName();
 
     private List<Box> mAlarms;
+    private MyLab myLab = null;
 
     public List<Box> getAlarms() {
         return mAlarms;
@@ -126,11 +130,14 @@ public class CreateAlarmActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Log.d(TAG, showAlarms());
+                //TODO: Save Alarms and boxes to the database...
+                if(mAlarms.size()!= 0)
+                    myLab.saveAlarmAndBoxes(mAlarms);
             }
         });
 
+        myLab = MyLab.get(sApplicationContext);
         mAlarms = new ArrayList<>();
-
     }
 
     /**

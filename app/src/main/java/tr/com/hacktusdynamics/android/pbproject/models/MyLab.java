@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
@@ -159,18 +160,16 @@ public class MyLab {
     }
 
 
-    /**Alarm portion of CRUD
-     * @param currentUserUUIDString
-     */
-    public List<Alarm> getAlarms(String currentUserUUIDString){
+    /**Alarm portion of CRUD*/
+    public List<Alarm> getAlarms(){
         List<Alarm> alarms = new ArrayList<>();
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
         AlarmCursorWrapper cursorWrapper = queryAlarm(
                 AlarmTable.Cols.USER_PROFILE_ID + " = ?",
                 new String[] {currentUserUUIDString}
         );
         try {
-            if(cursorWrapper.getCount() == 0)
-                return null;
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()){
                 Alarm alarm = cursorWrapper.getAlarm();
@@ -197,9 +196,10 @@ public class MyLab {
             cursorWrapper.close();
         }
     }
-    public void addAlarm(Alarm alarm){
+    public long addAlarm(Alarm alarm){
         ContentValues contentValues = getAlarmContentValues(alarm);
-        mDatabase.insert(AlarmTable.NAME, null, contentValues);
+        long insertId = mDatabase.insert(AlarmTable.NAME, null, contentValues);
+        return insertId;
     }
     public void updateAlarm(Alarm alarm){
         //String uuidString = box.getId().toString();
@@ -286,8 +286,36 @@ public class MyLab {
         );
         return new AlarmCursorWrapper(cursor);
     }
+
 /***/
 
+    public void saveAlarmAndBoxes(List<Box> alarms){
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
+        mDatabase.beginTransaction();
+        try {
+            //TODO: save Alarms and boxes
+            Alarm alarm = new Alarm(new Date(), currentUserUUIDString);
+            long insertId = addAlarm(alarm);
+            alarm.setId((int)insertId);
+
+            for(Box b : alarms){
+                b.setCreatedTime(alarm.getCreatedTime());
+                b.setForeignKeyId((int)insertId);
+                b.setBoxState(Box.BoxStates.FULL_CLOSE);
+
+                addBox(b);
+            }
+
+            mDatabase.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
+
+/***/
     private void create10DummyBoxes(){
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String userProfile = sp.getString(PREF_CURRENT_USER_UUID, null);

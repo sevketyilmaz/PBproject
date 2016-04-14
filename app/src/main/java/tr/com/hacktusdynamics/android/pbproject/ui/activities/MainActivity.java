@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: choose only the alarms for current user
         SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
-        List<Alarm> alarms = myLab.getAlarms(currentUserUUIDString);
+        List<Alarm> alarms = myLab.getAlarms();
         if(mAlarmAdapter == null){
             mAlarmAdapter = new AlarmAdapter(alarms);
             mAlarmRecyclerView.setAdapter(mAlarmAdapter);
