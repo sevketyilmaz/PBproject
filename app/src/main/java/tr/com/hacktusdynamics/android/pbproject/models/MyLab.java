@@ -59,14 +59,32 @@ public class MyLab {
 
     //setters getters
     /**Box portion of CRUD*/
-    public List<Box> getBoxes(){
+    public List<Box> getAllBoxes(){
         List<Box> boxes = new ArrayList<>();
         BoxCursorWrapper cursorWrapper = queryBox(null, null);
         try {
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()){
-                Box box = cursorWrapper.getBox();
-                boxes.add(box);
+                boxes.add(cursorWrapper.getBox());
+                cursorWrapper.moveToNext();
+            }
+        }finally {
+            cursorWrapper.close();
+        }
+        return boxes;
+    }
+    public List<Box> getBoxes(int alarmId){
+        List<Box> boxes = new ArrayList<>();
+        BoxCursorWrapper cursorWrapper =queryBox(
+                BoxTable.Cols.FOREIGN_KEY_ID + " = " + alarmId +
+                " AND " +
+                BoxTable.Cols.USER_PROFILE_ID + " = ?",
+                new String[]{getCurrentUserUUIDString()}
+        );
+        try{
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()){
+                boxes.add(cursorWrapper.getBox());
                 cursorWrapper.moveToNext();
             }
         }finally {
@@ -290,8 +308,7 @@ public class MyLab {
 /***/
 
     public void saveAlarmAndBoxes(List<Box> alarms){
-        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String currentUserUUIDString = sp.getString(PREF_CURRENT_USER_UUID, null);
+        String currentUserUUIDString = getCurrentUserUUIDString();
         mDatabase.beginTransaction();
         try {
             //TODO: save Alarms and boxes
@@ -313,6 +330,11 @@ public class MyLab {
         } finally {
             mDatabase.endTransaction();
         }
+    }
+
+    private String getCurrentUserUUIDString(){
+        SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sp.getString(PREF_CURRENT_USER_UUID, null);
     }
 
 /***/

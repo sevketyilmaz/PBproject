@@ -283,7 +283,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //TODO: open detail activity and show items
-            Toast.makeText(MainActivity.this, "Id: " + mAlarm.getId(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Id: " + mAlarm.getId(), Toast.LENGTH_SHORT).show();
+            Intent intent = AlarmPagerActivity.newIntent(sApplicationContext, mAlarm.getId());
+            startActivity(intent);
         }
     }
 
