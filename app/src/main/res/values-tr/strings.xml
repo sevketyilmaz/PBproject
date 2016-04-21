@@ -54,5 +54,7 @@
 
     <string name="title_activity_alarm_pager">Alarmlar Sayfası</string>
     <string name="alarms">Alarmlar : </string>
+    <string name="connection_failed">Cihaz ile baglanti kurulamadi.</string>
+    <string name="connection_lost">Cihaz ile baglanti koptu.</string>
 
 </resources>

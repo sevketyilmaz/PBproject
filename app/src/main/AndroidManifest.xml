@@ -3,6 +3,9 @@
     package="tr.com.hacktusdynamics.android.pbproject">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
 
     <application
         android:name=".MyApplication"

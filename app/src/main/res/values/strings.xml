@@ -54,5 +54,7 @@
 
     <string name="title_activity_alarm_pager">Alarms Page</string>
     <string name="alarms">Alarms : </string>
+    <string name="connection_failed">Unable to connect device.</string>
+    <string name="connection_lost">Device connection was lost.</string>
 
 </resources>
