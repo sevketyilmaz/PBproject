@@ -56,5 +56,16 @@
     <string name="alarms">Alarmlar : </string>
     <string name="connection_failed">Cihaz ile baglanti kurulamadi.</string>
     <string name="connection_lost">Cihaz ile baglanti koptu.</string>
+    <string name="bt_connect">Bluetooth Aygitlarini Ara</string>
+    <string name="bt_not_enabled_leaving">Bluetooth acilmadi. Cikiliyor.</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">cihazlar taraniyor...</string>
+    <string name="select_device">Baglanmak icin cihaz secin</string>
+    <string name="none_paired">Eslesen cihaz yok</string>
+    <string name="none_found">Cihaz bulunamadı</string>
+    <string name="title_paired_devices">Eslesen Cihazlar</string>
+    <string name="title_other_devices">Diger uygun cihazlar</string>
+    <string name="button_scan">Cihazları Ara</string>
 
 </resources>

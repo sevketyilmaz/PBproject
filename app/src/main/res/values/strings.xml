@@ -56,5 +56,16 @@
     <string name="alarms">Alarms : </string>
     <string name="connection_failed">Unable to connect device.</string>
     <string name="connection_lost">Device connection was lost.</string>
+    <string name="bt_connect">Search Bluetooth Devices</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving.</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
 
 </resources>

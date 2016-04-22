@@ -1,5 +1,8 @@
 package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -28,6 +32,7 @@ import java.util.List;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
+import tr.com.hacktusdynamics.android.pbproject.services.MyBluetoothService;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
 
@@ -36,8 +41,14 @@ import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicatio
 public class CreateAlarmActivity extends AppCompatActivity {
     private static final String TAG = CreateAlarmActivity.class.getSimpleName();
 
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE= 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+
     private List<Box> mAlarms;
     private MyLab myLab = null;
+    private BluetoothAdapter mBluetoothAdapter = null;
+    private MyBluetoothService myBluetoothService = null;
 
     public List<Box> getAlarms() {
         return mAlarms;
@@ -165,23 +176,56 @@ public class CreateAlarmActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:{
+                Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.action_bluetooth_scan:{
+                Toast.makeText(this, "Bluetooth Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                return true;
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        // If BT is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the chat session
+        } else if (myBluetoothService == null) {
+            //TODO:  setupChat();
+        }
     }
+
     @Override
-    public void onStop() {
-        super.onStop();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    //TODO: connectDevice(data, true);
+                }
+                break;
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Bluetooth is now enabled, so set up a chat session
+                    //TODO: setupChat();
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Log.d(TAG, "BT not enabled");
+                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+        }
     }
 
     /**
