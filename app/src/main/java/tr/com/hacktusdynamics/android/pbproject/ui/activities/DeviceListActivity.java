@@ -44,11 +44,7 @@ import tr.com.hacktusdynamics.android.pbproject.R;
  * Activity in the result Intent.
  */
 public class DeviceListActivity extends Activity {
-
-    /**
-     * Tag for Log
-     */
-    private static final String TAG = "DeviceListActivity";
+    private static final String TAG = DeviceListActivity.class.getSimpleName();
 
     /**
      * Return Intent extra
@@ -186,8 +182,8 @@ public class DeviceListActivity extends Activity {
     };
 
     /**
-     * The BroadcastReceiver that listens for discovered devices and changes the title when
-     * discovery is finished
+     * The BroadcastReceiver that listens for discovered devices,
+     * and changes the title when discovery is finished
      */
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override

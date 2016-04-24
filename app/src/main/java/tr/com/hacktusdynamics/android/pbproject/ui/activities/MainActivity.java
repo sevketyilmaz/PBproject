@@ -112,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                 //since its main activity, do nothing
                                 Toast.makeText(MainActivity.this, "Home clicked!", Toast.LENGTH_LONG).show();
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_CREATE_ALARM) {
-                                Toast.makeText(MainActivity.this, "Create alarm clicked!", Toast.LENGTH_LONG).show();
                                 intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
-                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_MEDICATIONS) {
                                 Toast.makeText(MainActivity.this, "Medications clicked!", Toast.LENGTH_LONG).show();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);

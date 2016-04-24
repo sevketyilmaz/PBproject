@@ -27,11 +27,18 @@
         <activity
             android:name=".ui.activities.CreateAlarmActivity"
             android:label="@string/create_alarm_activity_title"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tr.com.hacktusdynamics.android.pbproject.ui.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.DeviceListActivity"
+            android:label="@string/select_device"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog">
         </activity>
         <activity
             android:name=".ui.activities.ManageAccountActivity"

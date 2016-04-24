@@ -58,6 +58,12 @@
     <string name="connection_lost">Device connection was lost.</string>
     <string name="bt_connect">Search Bluetooth Devices</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving.</string>
+    <string name="title_connecting">Connecting…</string>
+    <string name="title_connected">Connected </string>
+    <string name="title_not_connected">Not connected</string>
+    <string name="bluetooth_not_available">Bluetooth is not available.</string>
+    <string name="not_connected">You are not connected to a pillbox</string>
+    <string name="no_alarm_selected">There is no Alarm selected.</string>
 
     <!--  DeviceListActivity -->
     <string name="scanning">scanning for devices...</string>

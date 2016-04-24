@@ -31,7 +31,8 @@ public class MyBluetoothService {
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
     //Unique UUID for this application
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+   // private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
     private final BluetoothAdapter mBluetoothAdapter;
     private final Handler mHandler;
@@ -43,6 +44,7 @@ public class MyBluetoothService {
     //constructors
     public MyBluetoothService(Context context, Handler handler){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //setState(STATE_NONE);
         mState = STATE_NONE;
         mHandler = handler;
         mContext = context;
@@ -122,6 +124,23 @@ public class MyBluetoothService {
         mHandler.sendMessage(message);
 
         setState(STATE_CONNECTED);
+    }
+
+    public synchronized void start() {
+        Log.d(TAG, "start()");
+        // Cancel any thread attempting to make a connection
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        // Cancel any thread currently running a connection
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        setState(STATE_NONE);
     }
 
     /**

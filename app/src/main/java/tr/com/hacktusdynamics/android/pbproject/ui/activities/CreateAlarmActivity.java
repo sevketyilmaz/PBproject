@@ -2,8 +2,13 @@ package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -29,6 +34,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
@@ -49,6 +55,49 @@ public class CreateAlarmActivity extends AppCompatActivity {
     private MyLab myLab = null;
     private BluetoothAdapter mBluetoothAdapter = null;
     private MyBluetoothService myBluetoothService = null;
+
+    /**
+     * The Handler that gets information back from the MyBluetoothService
+     */
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constants.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case MyBluetoothService.STATE_CONNECTED:
+                            setStatus(R.string.title_connected);
+                            break;
+                        case MyBluetoothService.STATE_CONNECTING:
+                            setStatus(R.string.title_connecting);
+                            break;
+                        case MyBluetoothService.STATE_NONE:
+                            setStatus(R.string.title_not_connected);
+                            break;
+                    }
+                    break;
+                case Constants.MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    String writeMessage = new String(writeBuf);
+                    //mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    break;
+                case Constants.MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    break;
+                case Constants.MESSAGE_DEVICE_NAME:
+                    // log the connected device's name
+                    Log.d(TAG, "connected device name :" + msg.getData().getString(Constants.DEVICE_NAME));
+                    break;
+                case Constants.MESSAGE_TOAST:
+                        Toast.makeText(CreateAlarmActivity.this, msg.getData().getString(Constants.TOAST), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     public List<Box> getAlarms() {
         return mAlarms;
@@ -117,11 +166,11 @@ public class CreateAlarmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_alarm);
+        Log.d(TAG, "onCreate()");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.create_alarm_activity_title);
-        //TODO: getSupportActionBar().setSubtitle("subtitle"); add total box number that set for alarm...(CriminalIntent EOC12)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the seven
         // primary sections of the activity.
@@ -139,17 +188,155 @@ public class CreateAlarmActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Log.d(TAG, showAlarms());
-                //TODO: Save Alarms and boxes to the database...
-                if(mAlarms.size()!= 0)
+
+                // Check that we're actually connected before trying anything
+                if (myBluetoothService.getState() != MyBluetoothService.STATE_CONNECTED) {
+                    Snackbar.make(view, R.string.not_connected, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    MediaPlayer.create(CreateAlarmActivity.this, R.raw.not_connected).start();
+                    return;
+                }
+                //Check there is actually something to send
+                if(mAlarms.size()!= 0){
+                    //TODO: Save Alarms and boxes to the database...
                     myLab.saveAlarmAndBoxes(mAlarms);
+                    //TODO: send through bluetooth
+
+                    //TODO: close activity
+                    finish();
+                }else{
+                    Snackbar.make(view, R.string.no_alarm_selected, Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
         myLab = MyLab.get(sApplicationContext);
         mAlarms = new ArrayList<>();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        //If device has no bluetooth adapter close the activity.
+        if(mBluetoothAdapter == null){
+            Toast.makeText(this, R.string.bluetooth_not_available, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart()");
+        // If BT is not on, request that it be enabled.
+        // setupBluetoothService() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else if (myBluetoothService == null) {
+            //TODO:  setupChat();
+            setupBluetoothService();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG,"onResume()");
+        if(myBluetoothService != null){
+            // Only if the state is STATE_NONE, do we know that we haven't started already
+            if (myBluetoothService.getState() == MyBluetoothService.STATE_NONE) {
+                // Start the Bluetooth services
+                myBluetoothService.start();
+            }
+        }
+    }
+
+    private void setupBluetoothService() {
+        if(myBluetoothService == null)
+            myBluetoothService = new MyBluetoothService(this, mHandler);
+    }
+
+    //Updates the status on the action bar.
+    @Nullable
+    private void setStatus(int subtitle) {
+        getSupportActionBar().setSubtitle(subtitle);
+    }
+    @Nullable
+    private void setStatus(CharSequence subtitle){
+        getSupportActionBar().setSubtitle(subtitle);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_create_alarm, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:{
+                Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.action_bluetooth_scan:{
+                //Toast.makeText(this, "Bluetooth Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(myBluetoothService != null){
+            myBluetoothService.stop();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    connectDevice(data);
+                }
+                break;
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Bluetooth is now enabled, so set up a session
+                    //TODO: setupChat();
+                    setupBluetoothService();
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Log.d(TAG, "BT not enabled");
+                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+        }
+    }
+
+    /**
+     * Establish connection with other device
+     *
+     * @param data   An {@link Intent} with {@link DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
+     */
+    private void connectDevice(Intent data) {
+        // Get the device MAC address
+        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        Toast.makeText(this, address, Toast.LENGTH_LONG).show();
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Attempt to connect to the device
+        myBluetoothService.connect(device);
+    }
+
+
 
     /**
      * Setup icons for 7 tabs.
@@ -162,70 +349,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
         tabLayout.getTabAt(4).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_5));
         tabLayout.getTabAt(5).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_6));
         tabLayout.getTabAt(6).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_filter_7));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_alarm, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:{
-                Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            case R.id.action_bluetooth_scan:{
-                Toast.makeText(this, "Bluetooth Clicked", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, DeviceListActivity.class);
-                startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
-        } else if (myBluetoothService == null) {
-            //TODO:  setupChat();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    //TODO: connectDevice(data, true);
-                }
-                break;
-            case REQUEST_ENABLE_BT:
-                // When the request to enable Bluetooth returns
-                if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a chat session
-                    //TODO: setupChat();
-                } else {
-                    // User did not enable Bluetooth or an error occurred
-                    Log.d(TAG, "BT not enabled");
-                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-        }
     }
 
     /**

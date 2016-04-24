@@ -58,6 +58,12 @@
     <string name="connection_lost">Cihaz ile baglanti koptu.</string>
     <string name="bt_connect">Bluetooth Aygitlarini Ara</string>
     <string name="bt_not_enabled_leaving">Bluetooth acilmadi. Cikiliyor.</string>
+    <string name="title_connecting">Baglaniyor…</string>
+    <string name="title_connected">Baglandi.</string>
+    <string name="title_not_connected">Baglanmadi.</string>
+    <string name="bluetooth_not_available">Bluetooth bu cihazda calismiyor.</string>
+    <string name="not_connected">Ilaç kutusuna bagli degilsiniz.</string>
+    <string name="no_alarm_selected">Hicbir Alarm secilmedi.</string>
 
     <!--  DeviceListActivity -->
     <string name="scanning">cihazlar taraniyor...</string>
