@@ -3,7 +3,10 @@ package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +44,7 @@ import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 import tr.com.hacktusdynamics.android.pbproject.services.MyBluetoothService;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
+import tr.com.hacktusdynamics.android.pbproject.utils.BluetoothStringUtils;
 
 import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
@@ -80,13 +84,18 @@ public class CreateAlarmActivity extends AppCompatActivity {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
+                    Log.d(TAG, writeMessage);
+                    Toast.makeText(CreateAlarmActivity.this, "Send Message \n" + writeMessage, Toast.LENGTH_SHORT).show();
                     //mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
+                    //byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    //String readMessage = new String(readBuf, 0, msg.arg1);
                     //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    String readMessage = (String) msg.obj;
+                    Log.d(TAG, readMessage);
+                    Toast.makeText(CreateAlarmActivity.this, "Read Message \n" + readMessage, Toast.LENGTH_SHORT).show();
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // log the connected device's name
@@ -188,8 +197,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, showAlarms());
-
                 // Check that we're actually connected before trying anything
                 if (myBluetoothService.getState() != MyBluetoothService.STATE_CONNECTED) {
                     Snackbar.make(view, R.string.not_connected, Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -198,12 +205,15 @@ public class CreateAlarmActivity extends AppCompatActivity {
                 }
                 //Check there is actually something to send
                 if(mAlarms.size()!= 0){
-                    //TODO: Save Alarms and boxes to the database...
+                    //Save Alarms and boxes to the database...
                     myLab.saveAlarmAndBoxes(mAlarms);
                     //TODO: send through bluetooth
-
+                    String json = BluetoothStringUtils.setAllBoxesActionBluetoothString(mAlarms);
+                    json += '\n';
+                    Log.d(TAG, json);
+                    sendMessage(json);
                     //TODO: close activity
-                    finish();
+                    //finish();
                 }else{
                     Snackbar.make(view, R.string.no_alarm_selected, Snackbar.LENGTH_LONG).show();
                 }
@@ -235,6 +245,11 @@ public class CreateAlarmActivity extends AppCompatActivity {
             //TODO:  setupChat();
             setupBluetoothService();
         }
+
+        //Register for broadcast when Bluetooth on and off
+        IntentFilter filter =  new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        this.registerReceiver(mReceiver, filter);
+
     }
 
     @Override
@@ -290,11 +305,15 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         if(myBluetoothService != null){
             myBluetoothService.stop();
         }
+
+        //unregister Broadcast listeners
+        this.unregisterReceiver(mReceiver);
+
     }
 
     @Override
@@ -335,7 +354,25 @@ public class CreateAlarmActivity extends AppCompatActivity {
         // Attempt to connect to the device
         myBluetoothService.connect(device);
     }
+    /**
+     * Sends a message.
+     *
+     * @param message A string of text to send.
+     */
+    private void sendMessage(String message) {
+        // DoubleCheck that we're actually connected before trying anything
+        if (myBluetoothService.getState() != MyBluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // DoubleCheck that there's actually something to send
+        if (message.length() > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            byte[] send = message.getBytes();
+            myBluetoothService.write(send);
+        }
+    }
 
 
     /**
@@ -388,4 +425,29 @@ public class CreateAlarmActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    /**
+     * The BroadcastReceiver that listens for any BluetoothAdapter state changes
+     * ON or OFF after the CreateAlarmActivity created... If its OFF, Activity.finish();
+     */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+
+                switch (state){
+                    case BluetoothAdapter.STATE_OFF:
+                        Toast.makeText(CreateAlarmActivity.this, R.string.bluetooth_disabled,Toast.LENGTH_SHORT).show();
+                        CreateAlarmActivity.this.finish();
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Toast.makeText(CreateAlarmActivity.this, "BL on",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }
+    };
 }

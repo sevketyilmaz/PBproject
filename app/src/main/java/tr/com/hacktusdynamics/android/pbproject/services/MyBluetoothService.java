@@ -31,8 +31,8 @@ public class MyBluetoothService {
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
     //Unique UUID for this application
-   // private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    //private static final UUID MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
     private final BluetoothAdapter mBluetoothAdapter;
     private final Handler mHandler;
@@ -163,6 +163,24 @@ public class MyBluetoothService {
     }
 
     /**
+     * Write to the ConnectedThread in an unsynchronized manner
+     *
+     * @param out The bytes to write
+     * @see ConnectedThread#write(byte[])
+     */
+    public void write(byte[] out) {
+        // Create temporary object
+        ConnectedThread r;
+        // Synchronize a copy of the ConnectedThread
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        // Perform the write unsynchronized
+        r.write(out);
+    }
+
+    /**
      * Indicate that the connection attempt failed and notify the UI
      */
     private void connectionFailed(){
@@ -268,15 +286,14 @@ public class MyBluetoothService {
 
         //constructor
         public ConnectedThread(BluetoothSocket bluetoothSocket) {
-            Log.d(TAG, "ConnectedThread");
             mmSocket = bluetoothSocket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
             // Get the input and output streams, using temp objects because member streams are final
             try{
-                tmpIn = mmSocket.getInputStream();
-                tmpOut = mmSocket.getOutputStream();
+                tmpIn = bluetoothSocket.getInputStream();
+                tmpOut = bluetoothSocket.getOutputStream();
             }catch (IOException e){
                 Log.e(TAG, "ConnectedThread: tmp sockets not created", e);
             }
@@ -350,7 +367,7 @@ public class MyBluetoothService {
             try {
                 mmOutStream.write(buffer);
 
-                // Share the sent message back to the UI Activity
+                // Share the send message back to the UI Activity
                 mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "ConnectedThread: Exception during write", e);

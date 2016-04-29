@@ -107,6 +107,7 @@ public class DeviceListActivity extends Activity {
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!mBtAdapter.isEnabled()) finish();//if ever happened, finish();
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();

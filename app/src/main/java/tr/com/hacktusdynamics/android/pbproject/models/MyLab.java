@@ -311,7 +311,6 @@ public class MyLab {
         String currentUserUUIDString = getCurrentUserUUIDString();
         mDatabase.beginTransaction();
         try {
-            //TODO: save Alarms and boxes
             Alarm alarm = new Alarm(new Date(), currentUserUUIDString);
             long insertId = addAlarm(alarm);
             alarm.setId((int)insertId);
@@ -319,7 +318,7 @@ public class MyLab {
             for(Box b : alarms){
                 b.setCreatedTime(alarm.getCreatedTime());
                 b.setForeignKeyId((int)insertId);
-                b.setBoxState(Box.BoxStates.FULL_CLOSE);
+                b.setBoxState(Box.BoxStates.CLOSE_FULL);
 
                 addBox(b);
             }
@@ -348,7 +347,7 @@ public class MyLab {
         for(int i = 0; i < 10; i++){
             d = new Date((System.currentTimeMillis() + (i * 1000 * 60 * 60)));
             box = new Box(null, i, d, createdDate, -1, userProfile, -1);
-            box.setBoxState(Box.BoxStates.FULL_CLOSE);
+            box.setBoxState(Box.BoxStates.CLOSE_FULL);
             addBox(box);
         }
     }

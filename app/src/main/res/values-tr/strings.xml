@@ -58,6 +58,7 @@
     <string name="connection_lost">Cihaz ile baglanti koptu.</string>
     <string name="bt_connect">Bluetooth Aygitlarini Ara</string>
     <string name="bt_not_enabled_leaving">Bluetooth acilmadi. Cikiliyor.</string>
+    <string name="bluetooth_disabled">Bluetooth kapatildi, cikiliyor.</string>
     <string name="title_connecting">Baglaniyor…</string>
     <string name="title_connected">Baglandi.</string>
     <string name="title_not_connected">Baglanmadi.</string>

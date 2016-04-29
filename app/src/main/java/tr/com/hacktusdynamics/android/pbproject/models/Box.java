@@ -18,10 +18,10 @@ public class Box implements Serializable, Comparable<Box> {
     private int foreignKeyId; //Alarm class id
 
     public static enum BoxStates{
-        EMPTY_CLOSE("EMPTY_CLOSE"),
-        EMPTY_OPEN("EMPTY OPEN"),
-        FULL_CLOSE("FULL CLOSE"),
-        FULL_OPEN("FULL OPEN");
+        CLOSE_EMPTY("CLOSE_EMPTY"),
+        CLOSE_FULL("CLOSE FULL"),
+        CLOSE_DONE("CLOSE DONE"),
+        OPEN_FULL("OPEN FULL");
 
         private final String tag;
 
@@ -46,7 +46,7 @@ public class Box implements Serializable, Comparable<Box> {
      * @param boxNumber box number for creation
      * @param alarmDateTime null for current time
      * @param createdTime null for current time
-     * @param boxS integer box state, if less then zero set EMPTY_CLOSE
+     * @param boxS integer box state, if less then zero set CLOSE_EMPTY
      * @param userProfileId which user created the box
      * @param foreignKeyId Alarm class primary key
      *
@@ -57,7 +57,7 @@ public class Box implements Serializable, Comparable<Box> {
         setBoxNumber(boxNumber);
         setAlarmTime(alarmDateTime); //null for current datetime
         setCreatedTime(createdTime); //null for current datetime
-        setBoxState(getBoxStateFromInt(boxS)); //any value other than 0,1,2,3 is EMPTY_CLOSE
+        setBoxState(getBoxStateFromInt(boxS)); //any value other than 0,1,2,3 is CLOSE_EMPTY
         setUserProfileId(userProfileId);
         setForeignKeyId(foreignKeyId); // -1 default
     }
@@ -123,18 +123,18 @@ public class Box implements Serializable, Comparable<Box> {
         this.boxState = boxState;
     }
     public int getBoxStateInt(){
-        int bState = 0; //initially EMPTY_CLOSE
+        int bState = 0; //initially CLOSE_EMPTY
         switch (boxState){
-            case EMPTY_CLOSE:
+            case CLOSE_EMPTY:
                 bState = 0;
                 break;
-            case EMPTY_OPEN:
+            case CLOSE_FULL:
                 bState = 1;
                 break;
-            case FULL_CLOSE:
+            case CLOSE_DONE:
                 bState = 2;
                 break;
-            case FULL_OPEN:
+            case OPEN_FULL:
                 bState = 3;
                 break;
         }
@@ -142,19 +142,19 @@ public class Box implements Serializable, Comparable<Box> {
     }
 
     public BoxStates getBoxStateFromInt(int boxS){
-        BoxStates state = BoxStates.EMPTY_CLOSE;
+        BoxStates state = BoxStates.CLOSE_EMPTY;
         switch (boxS){
             case 0:
-                state = BoxStates.EMPTY_CLOSE;
+                state = BoxStates.CLOSE_EMPTY;
                 break;
             case 1:
-                state = BoxStates.EMPTY_OPEN;
+                state = BoxStates.CLOSE_FULL;
                 break;
             case 2:
-                state = BoxStates.FULL_CLOSE;
+                state = BoxStates.CLOSE_DONE;
                 break;
             case 3:
-                state = BoxStates.FULL_OPEN;
+                state = BoxStates.OPEN_FULL;
                 break;
             default: //boxS = -1
                 break;
@@ -171,4 +171,38 @@ public class Box implements Serializable, Comparable<Box> {
         return getAlarmTime().compareTo(otherBox.getAlarmTime());
     }
 
+    /** Return SudoJson string for box instance with alarmTime is long:
+     * boxNumber:bN; boxState:bS; alarmTime:aT
+     * JsonString: {"bN":1,"bS":0,"aT":1445258741847}
+     */
+    public String toBluetoothJson(){
+        long alarmTime = getAlarmTime().getTime();
+        int bState = 0; //all boxes initially CLOSE_EMPTY
+        switch (getBoxState()) {
+            case CLOSE_EMPTY:
+                bState = 0;
+                break;
+
+            case CLOSE_FULL:
+                bState = 1;
+                break;
+
+            case CLOSE_DONE:
+                bState = 2;
+                break;
+
+            case OPEN_FULL:
+                bState = 3;
+                break;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("\"bN\":");sb.append(getBoxNumber());sb.append(",");
+        sb.append("\"bS\":");sb.append(bState);sb.append(",");
+        sb.append("\"aT\":");sb.append((alarmTime/1000));
+        sb.append("}");
+
+        return sb.toString();
+    }
 }
