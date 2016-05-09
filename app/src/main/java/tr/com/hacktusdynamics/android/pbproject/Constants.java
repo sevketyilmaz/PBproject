@@ -39,6 +39,9 @@ public class Constants {
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
-
+    // ** Define constants for using AlarmReceiver ** //
+    public static String ACTION_ALARM_PILLBOX = "tr.com.hacktusdynamics.android.pbproject.action.alarm.pillbox";
+    public static final String BOX_ID = "BOX_ID";
+    public static final String DATE = "DATE";
 
 }

@@ -75,4 +75,10 @@
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
 
+    <!-- Notification content -->
+    <string name="notification_title">PillBox Alarm</string>
+    <string name="notification_tickertext">PillBox, Medication alarm received.</string>
+    <string name="notification_detail">"Alarm for box number: "</string>
+
+
 </resources>

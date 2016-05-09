@@ -379,7 +379,9 @@ public class MyBluetoothService {
          */
         public void cancel() {
             try {
+                Log.d(TAG, mmSocket.isConnected()?"connected": "notconnected");
                 mmSocket.close();
+                Log.d(TAG, mmSocket.isConnected()?"connected": "notconnected");
             } catch (IOException e) {
                 Log.e(TAG, "ConnectedThread: close() of connect socket failed", e);
             }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 
     <application
@@ -67,6 +68,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tr.com.hacktusdynamics.android.pbproject.ui.activities.MainActivity" />
         </activity>
+
+        <receiver android:name=".receivers.AlarmReceiver">
+            <intent-filter>
+                <action android:name="tr.com.hacktusdynamics.android.pbproject.action.alarm.pillbox" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

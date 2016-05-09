@@ -1,6 +1,8 @@
 package tr.com.hacktusdynamics.android.pbproject.ui.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -36,11 +38,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.Box;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
+import tr.com.hacktusdynamics.android.pbproject.receivers.AlarmReceiver;
 import tr.com.hacktusdynamics.android.pbproject.services.MyBluetoothService;
 import tr.com.hacktusdynamics.android.pbproject.ui.fragments.PlaceHolderFragment;
 import tr.com.hacktusdynamics.android.pbproject.utils.AlarmTimeComparator;
@@ -59,6 +63,8 @@ public class CreateAlarmActivity extends AppCompatActivity {
     private MyLab myLab = null;
     private BluetoothAdapter mBluetoothAdapter = null;
     private MyBluetoothService myBluetoothService = null;
+
+    private AlarmManager mAlarmManager = null;
 
     /**
      * The Handler that gets information back from the MyBluetoothService
@@ -193,6 +199,16 @@ public class CreateAlarmActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         setupTabIcons(); //sets icons to the tabs
 
+        myLab = MyLab.get(sApplicationContext);
+        mAlarms = new ArrayList<>();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        //If device has no bluetooth adapter close the activity.
+        if(mBluetoothAdapter == null){
+            Toast.makeText(this, R.string.bluetooth_not_available, Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,30 +221,28 @@ public class CreateAlarmActivity extends AppCompatActivity {
                 }
                 //Check there is actually something to send
                 if(mAlarms.size()!= 0){
+                    Collections.sort(mAlarms, new AlarmTimeComparator());//Sort alarms
                     //Save Alarms and boxes to the database...
                     myLab.saveAlarmAndBoxes(mAlarms);
-                    //TODO: send through bluetooth
+
+                    //send through bluetooth
                     String json = BluetoothStringUtils.setAllBoxesActionBluetoothString(mAlarms);
                     json += '\n';
                     Log.d(TAG, json);
                     sendMessage(json);
+
+                    //create Notifications for each alarm.
+                    createNotificationsForEachAlarm();
+
                     //TODO: close activity
-                    //finish();
+                    //finishTheActivity();
+                    finish();
                 }else{
                     Snackbar.make(view, R.string.no_alarm_selected, Snackbar.LENGTH_LONG).show();
                 }
             }
         });
 
-        myLab = MyLab.get(sApplicationContext);
-        mAlarms = new ArrayList<>();
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        //If device has no bluetooth adapter close the activity.
-        if(mBluetoothAdapter == null){
-            Toast.makeText(this, R.string.bluetooth_not_available, Toast.LENGTH_LONG).show();
-            finish();
-        }
     }
 
     @Override
@@ -242,7 +256,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the session
         } else if (myBluetoothService == null) {
-            //TODO:  setupChat();
+            //setup Bluetooth Service;
             setupBluetoothService();
         }
 
@@ -307,13 +321,15 @@ public class CreateAlarmActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(myBluetoothService != null){
-            myBluetoothService.stop();
-        }
+
+        Log.d(TAG, "onStop()...");
 
         //unregister Broadcast listeners
         this.unregisterReceiver(mReceiver);
 
+        if(myBluetoothService != null){
+            myBluetoothService.stop();
+        }
     }
 
     @Override
@@ -374,6 +390,31 @@ public class CreateAlarmActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create notifications for each alarm in mAlarms
+     */
+    //@TargetApi(Build.VERSION_CODES.KITKAT)
+    private void createNotificationsForEachAlarm() {
+        mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.setAction(Constants.ACTION_ALARM_PILLBOX);
+        Random random = new Random(0L);
+        for (int i = 0; i < mAlarms.size(); i++) {
+            Box box = mAlarms.get(i);
+            intent.putExtra(Constants.BOX_ID, box.getBoxNumber());
+            intent.putExtra(Constants.DATE, box.getAlarmTime().toString());
+            PendingIntent operation = PendingIntent.getBroadcast(this, (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_ONE_SHOT);
+            mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, box.getAlarmTime().getTime(), operation);
+            Log.d(TAG, "ALARM CREATED : " + box.getBoxNumber() + "/" + box.getAlarmTime().toString());
+        }
+
+    }
+
+/*
+    private void finishTheActivity() {
+        onStop();
+    }
+*/
 
     /**
      * Setup icons for 7 tabs.

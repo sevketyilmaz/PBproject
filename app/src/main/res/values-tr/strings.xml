@@ -75,4 +75,10 @@
     <string name="title_other_devices">Diger uygun cihazlar</string>
     <string name="button_scan">Cihazları Ara</string>
 
+    <!-- Notification content -->
+    <string name="notification_title">Akilli Ilac Kutusu Alarm</string>
+    <string name="notification_tickertext">Akıllı Ilac Kutusu, Ilac alarmi alindi.</string>
+    <string name="notification_detail">"Alarm, Kutu numarasi: "</string>
+
+
 </resources>
