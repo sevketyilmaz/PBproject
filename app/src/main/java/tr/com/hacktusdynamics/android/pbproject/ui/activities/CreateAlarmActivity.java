@@ -237,7 +237,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
                     //TODO: close activity
                     //finishTheActivity();
-                    finish();
+                    //finish();
                 }else{
                     Snackbar.make(view, R.string.no_alarm_selected, Snackbar.LENGTH_LONG).show();
                 }
@@ -400,7 +400,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
         mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.setAction(Constants.ACTION_ALARM_PILLBOX);
-        Random random = new Random(0L);
         for (int i = 0; i < mAlarms.size(); i++) {
             Box box = mAlarms.get(i);
             intent.putExtra(Constants.BOX_ID, box.getBoxNumber());

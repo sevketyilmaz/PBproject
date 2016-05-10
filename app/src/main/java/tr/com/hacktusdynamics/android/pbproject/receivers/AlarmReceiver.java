@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
@@ -26,6 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             String date = bundle.getString(Constants.DATE);
 
             generateNotification(context, boxId, date);
+            generateSmsMessage();
         }
     }
 
@@ -46,5 +48,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(boxId, notificationBuilder.build());
         Log.d(TAG,"NOTIFICATION CREATED:" + notificationContent);
+    }
+
+    private void generateSmsMessage() {
+        try {
+            Log.d(TAG, "sendSmsMessage()...");
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("00905313083780", null, "sms test", null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
