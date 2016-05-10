@@ -25,6 +25,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -306,6 +307,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:{
                 Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+                sendSmsMessages();
                 return true;
             }
             case R.id.action_bluetooth_scan:{
@@ -408,6 +410,17 @@ public class CreateAlarmActivity extends AppCompatActivity {
             Log.d(TAG, "ALARM CREATED : " + box.getBoxNumber() + "/" + box.getAlarmTime().toString());
         }
 
+    }
+
+    private void sendSmsMessages() {
+        //TODO: send a sms
+        try {
+            Log.d(TAG, "sendSmsMessage()...");
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("00905313083780", null, "sms test", null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 /*
