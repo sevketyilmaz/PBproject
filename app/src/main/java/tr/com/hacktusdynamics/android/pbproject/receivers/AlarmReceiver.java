@@ -34,7 +34,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private void generateNotification(Context context, int boxId, String date) {
         StringBuilder detail = new StringBuilder();
-        detail.append(context.getString(R.string.notification_detail));detail.append(boxId);detail.append("\n\n");
+        detail.append(context.getString(R.string.notification_detail));detail.append(boxId+1);detail.append("\n\n");
         String notificationContent = detail.toString();
         long[] myVibratePattern = {0,200,200,300};
 
@@ -47,7 +47,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setVibrate(myVibratePattern);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(boxId, notificationBuilder.build());
+        notificationManager.notify(boxId+1, notificationBuilder.build());
         Log.d(TAG,"NOTIFICATION CREATED:" + notificationContent);
     }
 

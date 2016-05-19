@@ -34,6 +34,8 @@ public class PlaceHolderFragment extends Fragment {
     int mSectionNumber;
     AlarmCardView mAlarmCardView1, mAlarmCardView2, mAlarmCardView3;
     TextDrawable boxNumberDrawable;
+    SharedPreferences sp;
+    String userProfileId;
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -62,6 +64,8 @@ public class PlaceHolderFragment extends Fragment {
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
         mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         textView.setText(getString(R.string.section_format, mSectionNumber));
+        sp = MyApplication.sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        userProfileId = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
 
         mAlarmCardView1 = (AlarmCardView) rootView.findViewById(R.id.alarm_card1);
         boxNumberDrawable = TextDrawable.builder()
@@ -80,8 +84,6 @@ public class PlaceHolderFragment extends Fragment {
                 //TODO: save the alarm to the mAlarms in Activity
                 int boxNumber = mSectionNumber * 3;
                 long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
-                SharedPreferences sp = MyApplication.sApplicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-                String userProfileId = sp.getString(Constants.PREF_CURRENT_USER_UUID, null);
                 ((CreateAlarmActivity) getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
             }
         });
@@ -90,7 +92,7 @@ public class PlaceHolderFragment extends Fragment {
             public void onClick(View view) {
                 //TODO: delete the alarm from mAlarms in Activity
                 int boxNumber = mSectionNumber * 3;
-                long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
+                //long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
                 ((CreateAlarmActivity)getActivity()).removeAlarm(boxNumber);
                 Toast.makeText(getActivity(), "HiDeleteButtonFromFragment_ boxNumber: " + boxNumber , Toast.LENGTH_SHORT).show();
             }
@@ -106,6 +108,22 @@ public class PlaceHolderFragment extends Fragment {
                 .buildRoundRect(Integer.toString((mSectionNumber*3)-1), Color.GREEN, 40);
         mAlarmCardView2.setImageDrawable(boxNumberDrawable);
         mAlarmCardView2.setBoxNumber((mSectionNumber * 3) - 1);
+        mAlarmCardView2.setOnTimeButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int boxNumber = ((mSectionNumber*3)-1);
+                long alarmDateTime = mAlarmCardView2.getBoxAlarmDateTime();
+                ((CreateAlarmActivity) getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
+            }
+        });
+        mAlarmCardView2.setOnDeleteButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int boxNumber = ((mSectionNumber*3)-1);
+                //long alarmDateTime = mAlarmCardView2.getBoxAlarmDateTime();
+                ((CreateAlarmActivity)getActivity()).removeAlarm(boxNumber);
+            }
+        });
 
         mAlarmCardView3 = (AlarmCardView) rootView.findViewById(R.id.alarm_card3);
         boxNumberDrawable = TextDrawable.builder()
@@ -117,6 +135,21 @@ public class PlaceHolderFragment extends Fragment {
                 .buildRoundRect(Integer.toString((mSectionNumber*3)-2), Color.GREEN, 40);
         mAlarmCardView3.setImageDrawable(boxNumberDrawable);
         mAlarmCardView3.setBoxNumber((mSectionNumber * 3) - 2);
+        mAlarmCardView3.setOnTimeButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int boxNumber = ((mSectionNumber * 3) - 2);
+                long alarmDateTime = mAlarmCardView3.getBoxAlarmDateTime();
+                ((CreateAlarmActivity)getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
+            }
+        });
+        mAlarmCardView3.setOnDeleteButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int boxNumber = ((mSectionNumber * 3) - 2);
+                ((CreateAlarmActivity)getActivity()).removeAlarm(boxNumber);
+            }
+        });
 
         Log.d(TAG, "onCreateView()" + mSectionNumber);
         return rootView;
