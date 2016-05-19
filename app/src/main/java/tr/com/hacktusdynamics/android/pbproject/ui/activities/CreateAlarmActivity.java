@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
@@ -230,7 +229,7 @@ public class CreateAlarmActivity extends AppCompatActivity {
                     String json = BluetoothStringUtils.setAllBoxesActionBluetoothString(mAlarms);
                     json += '\n';
                     Log.d(TAG, json);
-                    sendMessage(json);
+                    sendMessageToDevice(json);
 
                     //create Notifications for each alarm.
                     createNotificationsForEachAlarm();
@@ -375,9 +374,9 @@ public class CreateAlarmActivity extends AppCompatActivity {
     /**
      * Sends a message.
      *
-     * @param message A string of text to send.
+     * @param message A string of text to send to device.
      */
-    private void sendMessage(String message) {
+    private void sendMessageToDevice(String message) {
         // DoubleCheck that we're actually connected before trying anything
         if (myBluetoothService.getState() != MyBluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();

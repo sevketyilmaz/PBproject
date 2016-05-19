@@ -27,7 +27,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             String date = bundle.getString(Constants.DATE);
 
             generateNotification(context, boxId, date);
-            generateSmsMessage();
+            //TODO: genrate SMS message
+            // generateSmsMessage();
         }
     }
 
