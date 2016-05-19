@@ -160,6 +160,23 @@ public class MyLab {
             cursorWrapper.close();
         }
     }
+    public UserProfile getUserProfile(String stringUUUID){
+        UserProfileCursorWrapper cursorWrapper = queryUserProfiles(
+                UserProfileTable.Cols.UUID + " = ?",
+                new String[]{stringUUUID}
+        );
+        try {
+            if (cursorWrapper.getCount() == 0)
+                return null;
+            cursorWrapper.moveToFirst();
+            UserProfile p =(UserProfile)cursorWrapper.getUserProfile();
+            p.withIcon(sApplicationContext.getResources().getDrawable(R.drawable.guest_avatar));
+            p.withIdentifier(IDENTIFIER_USER);
+            return p;
+        }finally {
+            cursorWrapper.close();
+        }
+    }
     public void addUserProfile(UserProfile userProfile){
         ContentValues contentValues = getUserProfileContentValues(userProfile);
         mDatabase.insert(UserProfileTable.NAME, null, contentValues);
@@ -176,7 +193,9 @@ public class MyLab {
                 UserProfileTable.Cols.UUID + " = ?",
                 new String[]{uuidString});
     }
-
+    public UserProfile getCurrentUserProfile(){
+        return getUserProfile(getCurrentUserUUIDString());
+    }
 
     /**Alarm portion of CRUD*/
     public List<Alarm> getAlarms(){

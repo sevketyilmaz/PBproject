@@ -11,28 +11,36 @@ import android.util.Log;
 
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
+import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = AlarmReceiver.class.getSimpleName();
 
     String title,description;
+    String destinationAddress;//notified user phone number
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive()...");
+        destinationAddress = MyLab.get(context).getCurrentUserProfile().getDependentPhone();
         String action  = intent.getAction();
         if(Constants.ACTION_ALARM_PILLBOX.equals(action)){
             Bundle bundle = intent.getExtras();
             int boxId = bundle.getInt(Constants.BOX_ID);
             String date = bundle.getString(Constants.DATE);
 
-            generateNotification(context, boxId, date);
+            //generateNotification
+            String notificationContent = generateNotification(context, boxId, date);
             //TODO: genrate SMS message
-            // generateSmsMessage();
+            //generateSmsMessage(destinationAddress, notificationContent);
         }
     }
 
-    private void generateNotification(Context context, int boxId, String date) {
+    /**
+     * Generate notification for alarm
+     * return notificationContent
+     */
+    private String generateNotification(Context context, int boxId, String date) {
         StringBuilder detail = new StringBuilder();
         detail.append(context.getString(R.string.notification_detail));detail.append(boxId+1);detail.append("\n\n");
         String notificationContent = detail.toString();
@@ -49,13 +57,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(boxId+1, notificationBuilder.build());
         Log.d(TAG,"NOTIFICATION CREATED:" + notificationContent);
+        return notificationContent;
     }
 
-    private void generateSmsMessage() {
+    private void generateSmsMessage(String destinationAddress, String smsContent) {
         try {
-            Log.d(TAG, "sendSmsMessage()...");
+            Log.d(TAG, "generateSmsMessage()..to: " + destinationAddress + " with: " + smsContent);
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("00905313083780", null, "sms test", null, null);
+            smsManager.sendTextMessage(destinationAddress , null, smsContent, null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
