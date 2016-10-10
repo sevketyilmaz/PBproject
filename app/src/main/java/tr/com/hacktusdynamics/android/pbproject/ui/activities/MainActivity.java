@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -117,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Medications clicked!", Toast.LENGTH_LONG).show();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
-                                Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
+                                openUserSettingsActivity();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_HELP) {
                                 Toast.makeText(MainActivity.this, "Help clicked!", Toast.LENGTH_LONG).show();
@@ -138,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         UpdateContentUI();
+    }
+
+    private void openUserSettingsActivity() {
+        Toast.makeText(this, "SettingActivity clicked!", Toast.LENGTH_LONG).show();
+        //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+
     }
 
     @Override
@@ -237,13 +242,12 @@ public class MainActivity extends AppCompatActivity {
         return (ArrayList<IProfile>) p;
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -256,9 +260,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+*/
     private class AlarmHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Alarm mAlarm;
         private TextView alarmsNumberView;

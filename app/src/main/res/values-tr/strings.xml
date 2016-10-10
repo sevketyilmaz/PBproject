@@ -17,7 +17,7 @@
     <string name="drawer_item_medications">İlaçlar</string>
     <string name="drawer_item_help">Yardım</string>
 
-    <string name="section_format">Merhaba Dünya from section: %1$d</string>
+    <string name="section_format">from section: %1$d</string>
     <string name="create_alarm_activity_title">İlaç Kutusu Alarmları Oluştur</string>
 
     <string name="manage_account_activity_title">Hesapları Düzenle</string>
