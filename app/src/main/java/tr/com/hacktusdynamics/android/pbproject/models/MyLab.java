@@ -319,6 +319,7 @@ public class MyLab {
                 whereArgs,
                 null, //group by
                 null, //having
+                //null //order by
                 AlarmTable.Cols.CREATED_DATE + " DESC" //order by
         );
         return new AlarmCursorWrapper(cursor);
