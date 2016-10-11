@@ -79,6 +79,8 @@
     <string name="notification_title">PillBox Alarm</string>
     <string name="notification_tickertext">PillBox, Medication alarm received.</string>
     <string name="notification_detail">"Alarm for box number: "</string>
+    <string name="on_of_notification_label">You can on / of notification</string>
+    <string name="on_off_email_label">You can on / off email messages.</string>
 
 
 </resources>

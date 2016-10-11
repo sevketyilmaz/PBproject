@@ -115,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Medications clicked!", Toast.LENGTH_LONG).show();
                                 intent = new Intent(MainActivity.this, MedicationsActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
-                                //Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
-                                openUserSettingsActivity();
-                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                                Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
+                                //openUserSettingsActivity();
+                                intent = new Intent(MainActivity.this, SettingsActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_HELP) {
                                 Toast.makeText(MainActivity.this, "Help clicked!", Toast.LENGTH_LONG).show();
                                 //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
@@ -138,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
         UpdateContentUI();
     }
-
+/*
     private void openUserSettingsActivity() {
         Toast.makeText(this, "SettingActivity clicked!", Toast.LENGTH_LONG).show();
         //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
 
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();

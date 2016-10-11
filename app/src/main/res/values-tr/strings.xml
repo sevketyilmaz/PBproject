@@ -79,6 +79,8 @@
     <string name="notification_title">Akilli Ilac Kutusu Alarm</string>
     <string name="notification_tickertext">Akıllı Ilac Kutusu, Ilac alarmi alindi.</string>
     <string name="notification_detail">"Alarm, Kutu numarasi: "</string>
+    <string name="on_of_notification_label">Notifikasyonları açıp kapatabilirsiniz.</string>
+    <string name="on_off_email_label">Email messajlarını açıp kapatabilirsiniz.</string>
 
 
 </resources>
