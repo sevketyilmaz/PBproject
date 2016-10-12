@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
@@ -12,6 +13,11 @@ import android.util.Log;
 import tr.com.hacktusdynamics.android.pbproject.Constants;
 import tr.com.hacktusdynamics.android.pbproject.R;
 import tr.com.hacktusdynamics.android.pbproject.models.MyLab;
+
+import static android.content.Context.MODE_PRIVATE;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_NAME;
+import static tr.com.hacktusdynamics.android.pbproject.Constants.PREF_SMS_SEND;
+import static tr.com.hacktusdynamics.android.pbproject.MyApplication.sApplicationContext;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = AlarmReceiver.class.getSimpleName();
@@ -32,7 +38,12 @@ public class AlarmReceiver extends BroadcastReceiver {
             //generateNotification
             String notificationContent = generateNotification(context, boxId, date);
             //TODO: generate SMS message
-            generateSmsMessage(destinationAddress, notificationContent);
+            SharedPreferences sp = sApplicationContext.getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+            boolean sendSms = sp.getBoolean(PREF_SMS_SEND, true);
+            Log.d(TAG, "sendSMS: " + sendSms);
+            if(sendSms) {
+                generateSmsMessage(destinationAddress, notificationContent);
+            }
         }
     }
 

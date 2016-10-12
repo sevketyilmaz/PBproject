@@ -29,6 +29,8 @@ public class MyApplication extends Application {
          * If app runs in the first time: (!PREF_GUEST_EXIST)
          * Create guest profile and save to the database
          * Set the currentUserUUID to the guest profile uuid
+         *
+         * Create the SendSms prefs
          */
         if(!sp.contains(Constants.PREF_GUEST_EXIST)){
             String guestUUID = UUID.randomUUID().toString();
@@ -37,6 +39,7 @@ public class MyApplication extends Application {
             //Check guestUUID before delete the UserProfile, you should never delete guestProfile!
             spe.putString(Constants.PREF_GUEST_UUID, guestUUID);
             spe.putString(Constants.PREF_CURRENT_USER_UUID, guestUUID);
+            spe.putBoolean(Constants.PREF_SMS_SEND, true);Log.d(TAG, "Pref_Sms_Send: True");
             spe.commit();
 
             //add guestProfile to the database
