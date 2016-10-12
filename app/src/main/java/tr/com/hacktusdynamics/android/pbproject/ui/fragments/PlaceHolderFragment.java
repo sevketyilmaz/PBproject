@@ -81,7 +81,7 @@ public class PlaceHolderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "HiTimeButtonFromFragment", Toast.LENGTH_SHORT).show();
-                //TODO: save the alarm to the mAlarms in Activity
+                // save the alarm to the mAlarms in Activity
                 int boxNumber = mSectionNumber * 3;
                 long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
                 ((CreateAlarmActivity) getActivity()).addOrUpdateAlarm(boxNumber, alarmDateTime, userProfileId);
@@ -90,7 +90,7 @@ public class PlaceHolderFragment extends Fragment {
         mAlarmCardView1.setOnDeleteButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: delete the alarm from mAlarms in Activity
+                // delete the alarm from mAlarms in Activity
                 int boxNumber = mSectionNumber * 3;
                 //long alarmDateTime = mAlarmCardView1.getBoxAlarmDateTime();
                 ((CreateAlarmActivity)getActivity()).removeAlarm(boxNumber);

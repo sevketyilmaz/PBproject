@@ -31,8 +31,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             //generateNotification
             String notificationContent = generateNotification(context, boxId, date);
-            //TODO: genrate SMS message
-            //generateSmsMessage(destinationAddress, notificationContent);
+            //TODO: generate SMS message
+            generateSmsMessage(destinationAddress, notificationContent);
         }
     }
 

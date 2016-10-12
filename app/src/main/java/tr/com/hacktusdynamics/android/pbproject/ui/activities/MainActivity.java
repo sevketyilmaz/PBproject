@@ -112,15 +112,15 @@ public class MainActivity extends AppCompatActivity {
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_CREATE_ALARM) {
                                 intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_ITEM_MEDICATIONS) {
-                                Toast.makeText(MainActivity.this, "Medications clicked!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Medications opening !", Toast.LENGTH_LONG).show();
                                 intent = new Intent(MainActivity.this, MedicationsActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_SETTINGS) {
-                                Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(MainActivity.this, "Setting clicked!", Toast.LENGTH_LONG).show();
                                 //openUserSettingsActivity();
                                 intent = new Intent(MainActivity.this, SettingsActivity.class);
                             } else if (drawerItem.getIdentifier() == IDENTIFIER_STICKY_HELP) {
-                                Toast.makeText(MainActivity.this, "Help clicked!", Toast.LENGTH_LONG).show();
-                                //intent = new Intent(MainActivity.this, CreateAlarmActivity.class);
+                                //Toast.makeText(MainActivity.this, "Help clicked!", Toast.LENGTH_LONG).show();
+                                intent = new Intent(MainActivity.this, HelpActivity.class);
                             }
 
                             //Start the clicked item activity
@@ -284,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            //TODO: open detail activity and show items
             //Toast.makeText(MainActivity.this, "Id: " + mAlarm.getId(), Toast.LENGTH_SHORT).show();
             Intent intent = AlarmPagerActivity.newIntent(sApplicationContext, mAlarm.getId());
             startActivity(intent);

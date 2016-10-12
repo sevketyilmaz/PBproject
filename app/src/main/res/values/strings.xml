@@ -82,5 +82,15 @@
     <string name="on_of_notification_label">You can on / of notification</string>
     <string name="on_off_email_label">You can on / off email messages.</string>
 
+    <!-- HelpActivity content-->
+    <string name="h0">You use the menu for all functionality.</string>
+    <string name="h1">Use down arrow for Manage the Account.</string>
+    <string name="h2">You can make the changes for User.</string>
+    <string name="h3">You create the alarms from here.</string>
+    <string name="h4">You can found the PillBox from Bluetooth button. Password: 1234</string>
+    <string name="h5">You can set the alarm date and time for each box.</string>
+    <string name="h6">You can send the alarms to the PillBox device with FAB button.</string>
+    <string name="h7">Main Page shows the latest saved alarms.</string>
+
 
 </resources>

@@ -82,5 +82,15 @@
     <string name="on_of_notification_label">Notifikasyonları açıp kapatabilirsiniz.</string>
     <string name="on_off_email_label">Email messajlarını açıp kapatabilirsiniz.</string>
 
+    <!-- HelpActivity content-->
+    <string name="h0">Bütün işlevselliğe menüden ulaşabilir siniz.</string>
+    <string name="h1">Aşağı ok tuşu ile hesapları düzenliyebilir siniz.</string>
+    <string name="h2">Kullanıcı değişikliklerini buradan yapabilir siniz.</string>
+    <string name="h3">Alarmları bu sayfadan yapabilir siniz.</string>
+    <string name="h4">İlaç Kutusunu Bluetooth tuşu ile arayıp bulabilirsiniz. Şifre: 1234</string>
+    <string name="h5">Her bir kutu için alarm tarih ve saatini ayarlıyabilir siniz.</string>
+    <string name="h6">Alarmları ilaç kutusuna FAB tuşu ile gönderebilir siniz.</string>
+    <string name="h7">Ana sayfa en son kaydettiğiniz alarmları gösterir.</string>
+
 
 </resources>

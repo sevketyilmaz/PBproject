@@ -306,7 +306,8 @@ public class CreateAlarmActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:{
                 Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
-                sendSmsMessages();
+                //TODO This is send a test SMS message to 05313083780 from settings
+                //sendSmsMessages();
                 return true;
             }
             case R.id.action_bluetooth_scan:{
@@ -411,7 +412,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
     }
 
     private void sendSmsMessages() {
-        //TODO: send a sms
         try {
             Log.d(TAG, "sendSmsMessage()...");
             SmsManager smsManager = SmsManager.getDefault();
