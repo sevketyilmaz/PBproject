@@ -30,6 +30,8 @@ public class SettingsActivity extends AppCompatActivity {
         spe = sp.edit();
 
         smsSwitch = (Switch) findViewById(R.id.switch_sms);
+        smsSwitch.setChecked(sp.getBoolean(Constants.PREF_SMS_SEND, true));
+
         smsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

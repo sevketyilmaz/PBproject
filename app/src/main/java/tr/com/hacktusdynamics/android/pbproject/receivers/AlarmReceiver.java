@@ -1,5 +1,6 @@
 package tr.com.hacktusdynamics.android.pbproject.receivers;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -56,13 +57,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         detail.append(context.getString(R.string.notification_detail));detail.append(boxId+1);detail.append("\n\n");
         String notificationContent = detail.toString();
         long[] myVibratePattern = {0,200,200,300};
-
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_dialog_alert)
                 .setTicker(context.getString(R.string.notification_tickertext))
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(notificationContent)
                 .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_SOUND)
                 .setVibrate(myVibratePattern);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
